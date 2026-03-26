@@ -96,12 +96,24 @@ export default function LeadForm() {
 
     setStatus("loading");
 
-    // Simulate API call (would connect to backend in production)
-    setTimeout(() => {
-      setStatus("success");
-      setMsg("Thanks! We'll be in touch within 24 hours.");
-      setForm({ name: "", email: "", phone: "", restaurant: "" });
-    }, 1500);
+    try {
+      const res = await fetch("https://api-production-90b5.up.railway.app/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (res.ok) {
+        setStatus("success");
+        setMsg("Thanks! We'll be in touch within 24 hours.");
+        setForm({ name: "", email: "", phone: "", restaurant: "" });
+      } else {
+        setStatus("error");
+        setMsg("Something went wrong. Try again or call us directly.");
+      }
+    } catch {
+      setStatus("error");
+      setMsg("Network error. Please try again.");
+    }
   };
 
   return (
