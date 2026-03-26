@@ -3,12 +3,14 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Package, DollarSign, Clock, CheckCircle, XCircle, RefreshCw,
-  Phone, X, Users, MessageSquare, TrendingUp, ChevronRight,
-  Copy, Check, ExternalLink
+  Package, DollarSign, Clock, CheckCircle, Phone, RefreshCw,
+  Users, MessageSquare, TrendingUp, ChevronRight,
+  Copy, Check, ExternalLink, BarChart3, LogIn, Key
 } from "lucide-react";
 
 const API = "https://api-production-90b5.up.railway.app";
+const TOKEN_KEY = "orderflow_token";
+const RESTAURANT_KEY = "orderflow_restaurant";
 
 // ─── Types ────────────────────────────────────────────────────
 interface Stats {
@@ -33,6 +35,14 @@ interface Call {
   id: string; call_sid?: string; from_number?: string; to_number?: string;
   duration_seconds?: number; status?: string; transcript?: string;
   recording_url?: string; created_at: string;
+}
+
+interface Analytics {
+  call_stats: { total_calls: number; avg_duration_seconds: number; completion_rate: number };
+  revenue_per_day: { date: string; revenue: number }[];
+  top_items: { name: string; count: number }[];
+  lead_funnel: { new: number; contacted: number; qualified: number; converted: number };
+  lead_conversion_rate: number;
 }
 
 // ─── Config ────────────────────────────────────────────────────
@@ -67,6 +77,93 @@ function fmtDuration(s?: number) {
   const sec = s % 60;
   return m > 0 ? `${m}m ${sec}s` : `${sec}s`;
 }
+function getAuthHeaders(token: string) {
+  return { "Authorization": `Bearer ${token}` };
+}
+
+// ─── Login View ────────────────────────────────────────────────
+function LoginView({ onLogin }: { onLogin: (token: string, name: string, slug: string) => void }) {
+  const [apiKey, setApiKey] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!apiKey.trim()) return;
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch(`${API}/api/dashboard/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ api_key: apiKey.trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Invalid API key");
+        return;
+      }
+      localStorage.setItem(TOKEN_KEY, data.token);
+      localStorage.setItem(RESTAURANT_KEY, JSON.stringify({
+        name: data.restaurant_name,
+        slug: data.restaurant_slug,
+        id: data.restaurant_id,
+      }));
+      onLogin(data.token, data.restaurant_name, data.restaurant_slug);
+    } catch {
+      setError("Connection failed. Is the backend running?");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <main className="min-h-screen bg-[var(--void)] flex items-center justify-center p-4">
+      <motion.div
+        className="w-full max-w-sm"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 bg-[var(--orange)]/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <Key size={28} className="text-[var(--orange)]" />
+          </div>
+          <h1 className="text-2xl font-black text-white">OrderFlow Dashboard</h1>
+          <p className="text-[var(--gray-500)] text-sm mt-1">Enter your restaurant API key to continue</p>
+        </div>
+        <form onSubmit={handleSubmit} className="bg-[var(--glass)] backdrop-blur-xl border border-[var(--border)] rounded-2xl p-6">
+          <div className="mb-4">
+            <label className="block text-xs font-bold text-[var(--gray-500)] uppercase tracking-wider mb-2">API Key</label>
+            <input
+              type="password"
+              value={apiKey}
+              onChange={(e) => setApiKey(e.target.value)}
+              placeholder="sk_live_..."
+              className="w-full bg-black/30 border border-[var(--border)] rounded-xl px-4 py-3 text-white placeholder-[var(--gray-700)] text-sm focus:outline-none focus:border-[var(--orange)] transition-colors"
+              autoFocus
+            />
+          </div>
+          {error && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+              className="mb-4 px-3 py-2 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-xs">
+              {error}
+            </motion.div>
+          )}
+          <button
+            type="submit"
+            disabled={loading || !apiKey.trim()}
+            className="w-full py-3 rounded-xl bg-[var(--orange)] text-white font-bold text-sm hover:opacity-90 disabled:opacity-40 transition-all flex items-center justify-center gap-2"
+          >
+            {loading ? <RefreshCw size={14} className="animate-spin" /> : <LogIn size={14} />}
+            {loading ? "Authenticating..." : "Sign In"}
+          </button>
+        </form>
+        <p className="text-center text-[var(--gray-700)] text-xs mt-4">Your API key is stored locally in your browser</p>
+      </motion.div>
+    </main>
+  );
+}
 
 // ─── Stat Card ────────────────────────────────────────────────
 function StatCard({ label, value, icon: Icon, color }: { label: string; value: string | number; icon: any; color: string }) {
@@ -100,8 +197,8 @@ function CopyButton({ text }: { text: string }) {
   );
 }
 
-// ─── Orders View ───────────────────────────────────────────────
-function OrdersView() {
+// ─── Orders View ────────────────────────────────────────────────
+function OrdersView({ token, restaurantSlug }: { token: string; restaurantSlug: string }) {
   const [stats, setStats] = useState<Stats | null>(null);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
@@ -110,14 +207,14 @@ function OrdersView() {
   const fetchData = useCallback(async () => {
     try {
       const [sr, or] = await Promise.all([
-        fetch(`${API}/api/dashboard/stats`),
-        fetch(`${API}/api/dashboard/orders?limit=100`),
+        fetch(`${API}/api/dashboard/stats?restaurant_id=${restaurantSlug}`, { headers: getAuthHeaders(token) }),
+        fetch(`${API}/api/dashboard/orders?limit=100&restaurant_id=${restaurantSlug}`, { headers: getAuthHeaders(token) }),
       ]);
       setStats(await sr.json());
       const d = await or.json();
       setOrders(d.orders || []);
     } finally { setLoading(false); }
-  }, []);
+  }, [token, restaurantSlug]);
 
   useEffect(() => { fetchData(); const t = setInterval(fetchData, 15000); return () => clearInterval(t); }, [fetchData]);
 
@@ -131,7 +228,6 @@ function OrdersView() {
 
   return (
     <div>
-      {/* Stats */}
       {stats && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
           <StatCard label="Revenue" value={`$${stats.total_revenue.toFixed(2)}`} icon={DollarSign} color="#FF6B35" />
@@ -154,7 +250,7 @@ function OrdersView() {
       </div>
 
       {/* List */}
-      {loading ? <LoadingSpinner /> : filtered.length === 0 ? <EmptyState icon={Package} msg="No orders yet" sub="Call +17705255393 to test" /> : (
+      {loading ? <LoadingSpinner /> : filtered.length === 0 ? <EmptyState icon={Package} msg="No orders yet" sub="Call your voice number to test" /> : (
         <div className="space-y-2">
           {filtered.map((o) => {
             const cfg = STATUS_CONFIG[o.status] || STATUS_CONFIG.received;
@@ -215,7 +311,7 @@ function OrdersView() {
 }
 
 // ─── Leads View ────────────────────────────────────────────────
-function LeadsView() {
+function LeadsView({ token, restaurantSlug }: { token: string; restaurantSlug: string }) {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [counts, setCounts] = useState<any>({});
   const [loading, setLoading] = useState(true);
@@ -224,14 +320,14 @@ function LeadsView() {
   const fetchData = useCallback(async () => {
     try {
       const [lr, cr] = await Promise.all([
-        fetch(`${API}/api/dashboard/leads?limit=100`),
-        fetch(`${API}/api/dashboard/leads/count`),
+        fetch(`${API}/api/dashboard/leads?limit=100&restaurant_id=${restaurantSlug}`, { headers: getAuthHeaders(token) }),
+        fetch(`${API}/api/dashboard/leads/count?restaurant_id=${restaurantSlug}`, { headers: getAuthHeaders(token) }),
       ]);
       const ld = await lr.json();
       setLeads(ld.leads || []);
       setCounts(await cr.json());
     } finally { setLoading(false); }
-  }, []);
+  }, [token, restaurantSlug]);
 
   useEffect(() => { fetchData(); const t = setInterval(fetchData, 20000); return () => clearInterval(t); }, [fetchData]);
 
@@ -311,23 +407,23 @@ function LeadsView() {
 }
 
 // ─── Calls View ───────────────────────────────────────────────
-function CallsView() {
+function CallsView({ token, restaurantSlug }: { token: string; restaurantSlug: string }) {
   const [calls, setCalls] = useState<Call[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
     try {
-      const r = await fetch(`${API}/api/dashboard/calls?limit=100`);
+      const r = await fetch(`${API}/api/dashboard/calls?limit=100&restaurant_id=${restaurantSlug}`, { headers: getAuthHeaders(token) });
       const d = await r.json();
       setCalls(d.calls || []);
     } finally { setLoading(false); }
-  }, []);
+  }, [token, restaurantSlug]);
 
   useEffect(() => { fetchData(); const t = setInterval(fetchData, 20000); return () => clearInterval(t); }, [fetchData]);
 
   return (
     <div>
-      {loading ? <LoadingSpinner /> : calls.length === 0 ? <EmptyState icon={Phone} msg="No calls yet" sub="Call +17705255393 to test the voice AI" /> : (
+      {loading ? <LoadingSpinner /> : calls.length === 0 ? <EmptyState icon={Phone} msg="No calls yet" sub="Call your voice number to test the AI" /> : (
         <div className="space-y-2">
           {calls.map((call) => {
             const statusColor = call.status === "completed" ? "#22c55e" : call.status === "failed" ? "#ef4444" : "#f97316";
@@ -370,6 +466,146 @@ function CallsView() {
   );
 }
 
+// ─── Analytics View ────────────────────────────────────────────
+function AnalyticsView({ token, restaurantSlug }: { token: string; restaurantSlug: string }) {
+  const [data, setData] = useState<Analytics | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchData = useCallback(async () => {
+    try {
+      const r = await fetch(`${API}/api/dashboard/analytics?restaurant_id=${restaurantSlug}`, { headers: getAuthHeaders(token) });
+      const json = await r.json();
+      setData(json);
+    } finally { setLoading(false); }
+  }, [token, restaurantSlug]);
+
+  useEffect(() => { fetchData(); const t = setInterval(fetchData, 30000); return () => clearInterval(t); }, [fetchData]);
+
+  if (loading) return <LoadingSpinner />;
+
+  const maxRevenue = data ? Math.max(...data.revenue_per_day.map((d) => d.revenue), 1) : 1;
+
+  // Lead funnel values
+  const funnel = data?.lead_funnel ?? { new: 0, contacted: 0, qualified: 0, converted: 0 };
+  const funnelMax = Math.max(funnel.new, funnel.contacted, funnel.qualified, funnel.converted, 1);
+
+  const funnelSteps = [
+    { label: "New", value: funnel.new, color: "#8b5cf6" },
+    { label: "Contacted", value: funnel.contacted, color: "#3b82f6" },
+    { label: "Qualified", value: funnel.qualified, color: "#10b981" },
+    { label: "Converted", value: funnel.converted, color: "#22c55e" },
+  ];
+
+  return (
+    <div className="space-y-6">
+      {/* Call Stats */}
+      <div>
+        <h3 className="text-sm font-bold text-[var(--gray-500)] uppercase tracking-wider mb-3">📞 Call Performance</h3>
+        <div className="grid grid-cols-3 gap-3">
+          <div className="bg-[var(--glass)] border border-[var(--border)] rounded-2xl p-4 text-center">
+            <p className="text-2xl font-black text-white">{data?.call_stats.total_calls ?? 0}</p>
+            <p className="text-xs text-[var(--gray-600)] mt-1">Total Calls</p>
+          </div>
+          <div className="bg-[var(--glass)] border border-[var(--border)] rounded-2xl p-4 text-center">
+            <p className="text-2xl font-black text-white">{fmtDuration(data?.call_stats.avg_duration_seconds)}</p>
+            <p className="text-xs text-[var(--gray-600)] mt-1">Avg Duration</p>
+          </div>
+          <div className="bg-[var(--glass)] border border-[var(--border)] rounded-2xl p-4 text-center">
+            <p className="text-2xl font-black text-white">{Math.round((data?.call_stats.completion_rate ?? 0) * 100)}%</p>
+            <p className="text-xs text-[var(--gray-600)] mt-1">Completion Rate</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Revenue Chart */}
+      <div>
+        <h3 className="text-sm font-bold text-[var(--gray-500)] uppercase tracking-wider mb-3">💰 Revenue — Last 7 Days</h3>
+        <div className="bg-[var(--glass)] border border-[var(--border)] rounded-2xl p-5">
+          {data?.revenue_per_day && data.revenue_per_day.length > 0 ? (
+            <>
+              <div className="flex items-end gap-1 h-24 mb-3">
+                {data.revenue_per_day.map((d, i) => (
+                  <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                    <div
+                      className="w-full bg-[var(--orange)] rounded-t transition-all hover:opacity-80"
+                      style={{ height: `${Math.max((d.revenue / maxRevenue) * 96, 4)}px` }}
+                      title={`$${d.revenue.toFixed(2)}`}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="flex gap-1">
+                {data.revenue_per_day.map((d, i) => (
+                  <div key={i} className="flex-1 text-center">
+                    <span className="text-[10px] text-[var(--gray-700)]">
+                      {new Date(d.date).toLocaleDateString("en-US", { weekday: "short" })}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : (
+            <p className="text-center text-[var(--gray-600)] text-sm py-8">No revenue data yet</p>
+          )}
+        </div>
+      </div>
+
+      {/* Top Items */}
+      <div>
+        <h3 className="text-sm font-bold text-[var(--gray-500)] uppercase tracking-wider mb-3">🔥 Top Items</h3>
+        <div className="bg-[var(--glass)] border border-[var(--border)] rounded-2xl overflow-hidden">
+          {data?.top_items && data.top_items.length > 0 ? data.top_items.map((item, i) => (
+            <div key={i} className="flex items-center justify-between px-5 py-3 border-b border-[var(--border)] last:border-0">
+              <div className="flex items-center gap-3">
+                <span className="w-6 h-6 rounded-lg bg-[var(--orange)]/20 text-[var(--orange)] text-xs font-black flex items-center justify-center shrink-0">
+                  {i + 1}
+                </span>
+                <span className="text-sm text-white font-medium">{item.name}</span>
+              </div>
+              <span className="text-sm font-bold text-[var(--gray-400)]">{item.count} orders</span>
+            </div>
+          )) : (
+            <p className="text-center text-[var(--gray-600)] text-sm py-6">No item data yet</p>
+          )}
+        </div>
+      </div>
+
+      {/* Lead Funnel */}
+      <div>
+        <h3 className="text-sm font-bold text-[var(--gray-500)] uppercase tracking-wider mb-3">🎯 Lead Funnel</h3>
+        <div className="bg-[var(--glass)] border border-[var(--border)] rounded-2xl p-5">
+          <div className="flex items-center gap-2 mb-4">
+            {funnelSteps.map((step, i) => {
+              const pct = funnelMax > 0 ? (step.value / funnelMax) * 100 : 0;
+              const isLast = i === funnelSteps.length - 1;
+              return (
+                <div key={step.label} className="flex-1">
+                  <div className="flex items-center gap-1 mb-1">
+                    <div className="h-2 rounded-full bg-black/30 overflow-hidden flex-1">
+                      <div
+                        className="h-full rounded-full transition-all"
+                        style={{ width: `${pct}%`, background: step.color }}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-sm font-black text-white">{step.value}</span>
+                    <span className="text-[10px] text-[var(--gray-700)]">{step.label}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-[var(--gray-600)]">Conversion Rate</span>
+            <span className="font-black text-[var(--orange)]">{Math.round((data?.lead_conversion_rate ?? 0) * 100)}%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Shared Components ─────────────────────────────────────────
 function LoadingSpinner() {
   return <div className="flex items-center justify-center py-20"><RefreshCw size={28} className="animate-spin text-[var(--orange)]" /></div>;
@@ -385,18 +621,55 @@ function EmptyState({ icon: Icon, msg, sub }: { icon: any; msg: string; sub?: st
 }
 
 // ─── Main Dashboard ─────────────────────────────────────────────
-type Tab = "orders" | "leads" | "calls";
+type Tab = "orders" | "leads" | "calls" | "analytics";
 const TABS: { id: Tab; label: string; icon: any }[] = [
-  { id: "orders", label: "Orders", icon: Package },
-  { id: "leads",  label: "Leads",  icon: Users },
-  { id: "calls",  label: "Calls",  icon: Phone },
+  { id: "orders",    label: "Orders",    icon: Package },
+  { id: "leads",     label: "Leads",     icon: Users },
+  { id: "calls",     label: "Calls",     icon: Phone },
+  { id: "analytics", label: "Analytics", icon: BarChart3 },
 ];
 
 export default function DashboardPage() {
   const [tab, setTab] = useState<Tab>("orders");
   const [refreshing, setRefreshing] = useState(false);
+  const [token, setToken] = useState<string | null>(null);
+  const [restaurantName, setRestaurantName] = useState("Pizza Palace");
+  const [restaurantSlug, setRestaurantSlug] = useState("sample");
 
-  // ─── Main Dashboard ────────────────────────────────────────
+  // Check for existing token on mount
+  useEffect(() => {
+    const stored = localStorage.getItem(TOKEN_KEY);
+    if (stored) {
+      setToken(stored);
+      const storedRest = localStorage.getItem(RESTAURANT_KEY);
+      if (storedRest) {
+        try {
+          const rest = JSON.parse(storedRest);
+          setRestaurantName(rest.name || "Restaurant");
+          setRestaurantSlug(rest.slug || "sample");
+        } catch {}
+      }
+    }
+  }, []);
+
+  const handleLogin = (newToken: string, name: string, slug: string) => {
+    setToken(newToken);
+    setRestaurantName(name);
+    setRestaurantSlug(slug);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(RESTAURANT_KEY);
+    setToken(null);
+  };
+
+  // Not logged in → show login
+  if (!token) {
+    return <LoginView onLogin={handleLogin} />;
+  }
+
+  // Logged in → show dashboard
   return (
     <main className="min-h-screen bg-[var(--void)] p-4 sm:p-6">
       <div className="max-w-5xl mx-auto">
@@ -404,12 +677,18 @@ export default function DashboardPage() {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-2xl font-black text-white">OrderFlow Dashboard</h1>
-            <p className="text-[var(--gray-600)] text-sm">Pizza Palace · {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}</p>
+            <p className="text-[var(--gray-600)] text-sm">
+              {restaurantName} · {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
+            </p>
           </div>
           <div className="flex items-center gap-2">
             <button onClick={() => { setRefreshing(true); setTimeout(() => setRefreshing(false), 1000); window.location.reload(); }}
               className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--glass)] border border-[var(--border)] text-white hover:bg-white/10 text-sm transition-colors">
               <RefreshCw size={13} className={refreshing ? "animate-spin" : ""} /> Refresh
+            </button>
+            <button onClick={handleLogout}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--glass)] border border-[var(--border)] text-[var(--gray-500)] hover:text-red-400 hover:border-red-500/30 text-sm transition-colors">
+              Sign Out
             </button>
             <a href="/" target="_blank"
               className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--glass)] border border-[var(--border)] text-white hover:bg-white/10 text-sm transition-colors">
@@ -431,9 +710,10 @@ export default function DashboardPage() {
         {/* Content */}
         <AnimatePresence mode="wait">
           <motion.div key={tab} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}>
-            {tab === "orders" && <OrdersView />}
-            {tab === "leads"  && <LeadsView />}
-            {tab === "calls"  && <CallsView />}
+            {tab === "orders"    && <OrdersView token={token} restaurantSlug={restaurantSlug} />}
+            {tab === "leads"     && <LeadsView token={token} restaurantSlug={restaurantSlug} />}
+            {tab === "calls"     && <CallsView token={token} restaurantSlug={restaurantSlug} />}
+            {tab === "analytics" && <AnalyticsView token={token} restaurantSlug={restaurantSlug} />}
           </motion.div>
         </AnimatePresence>
       </div>
