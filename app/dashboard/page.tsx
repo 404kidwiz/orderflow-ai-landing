@@ -2,7 +2,9 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Package, DollarSign, Clock, CheckCircle, XCircle, RefreshCw, Phone, ExternalLink } from "lucide-react";
+import { Package, DollarSign, Clock, CheckCircle, XCircle, RefreshCw, Phone, Lock, X } from "lucide-react";
+
+const DASHBOARD_PASSWORD = "pizza2026";
 
 const API = "https://api-production-90b5.up.railway.app";
 
@@ -170,6 +172,9 @@ export default function DashboardPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string | null>(null);
+  const [authenticated, setAuthenticated] = useState(false);
+  const [password, setPassword] = useState("");
+  const [wrong, setWrong] = useState(false);
 
   const fetchData = useCallback(async () => {
     try {
@@ -204,6 +209,63 @@ export default function DashboardPage() {
   };
 
   const filtered = filter ? orders.filter((o) => o.status === filter) : orders;
+
+  // Password Gate
+  if (!authenticated) {
+    return (
+      <main className="min-h-screen bg-[var(--void)] flex items-center justify-center p-6">
+        <motion.div
+          className="w-full max-w-sm bg-[var(--glass)] backdrop-blur-xl border border-[var(--border)] rounded-3xl p-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 200, damping: 25 }}
+        >
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 rounded-2xl bg-[var(--orange)]/20 flex items-center justify-center mx-auto mb-4">
+              <Lock size={28} className="text-[var(--orange)]" />
+            </div>
+            <h2 className="text-2xl font-black text-white">Dashboard Locked</h2>
+            <p className="text-[var(--gray-600)] mt-2 text-sm">Enter password to access orders</p>
+          </div>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (password === DASHBOARD_PASSWORD) {
+                setAuthenticated(true);
+                setWrong(false);
+              } else {
+                setWrong(true);
+              }
+            }}
+          >
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => { setPassword(e.target.value); setWrong(false); }}
+              placeholder="Enter password"
+              className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[var(--border)] text-white placeholder-[var(--gray-700)] focus:outline-none focus:border-[var(--orange)] transition-colors mb-3 text-center text-lg tracking-widest"
+              autoFocus
+            />
+            {wrong && (
+              <motion.p
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-red-400 text-sm text-center mb-3 flex items-center justify-center gap-1"
+              >
+                <X size={14} /> Wrong password
+              </motion.p>
+            )}
+            <button
+              type="submit"
+              className="w-full py-3 rounded-xl bg-[var(--orange)] text-white font-bold hover:opacity-90 transition-opacity"
+            >
+              Unlock
+            </button>
+          </form>
+        </motion.div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-[var(--void)] p-6">
