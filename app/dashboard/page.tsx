@@ -4,11 +4,10 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Package, DollarSign, Clock, CheckCircle, XCircle, RefreshCw,
-  Phone, Lock, X, Users, MessageSquare, TrendingUp, ChevronRight,
+  Phone, X, Users, MessageSquare, TrendingUp, ChevronRight,
   Copy, Check, ExternalLink
 } from "lucide-react";
 
-const DASHBOARD_PASSWORD = "pizza2026";
 const API = "https://api-production-90b5.up.railway.app";
 
 // ─── Types ────────────────────────────────────────────────────
@@ -394,49 +393,8 @@ const TABS: { id: Tab; label: string; icon: any }[] = [
 ];
 
 export default function DashboardPage() {
-  const [authenticated, setAuthenticated] = useState(false);
-  const [password, setPassword] = useState("");
-  const [wrong, setWrong] = useState(false);
   const [tab, setTab] = useState<Tab>("orders");
   const [refreshing, setRefreshing] = useState(false);
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (password === DASHBOARD_PASSWORD) { setAuthenticated(true); setWrong(false); }
-    else setWrong(true);
-  };
-
-  // ─── Login Gate ────────────────────────────────────────────
-  if (!authenticated) {
-    return (
-      <main className="min-h-screen bg-[var(--void)] flex items-center justify-center p-6">
-        <motion.div className="w-full max-w-sm bg-[var(--glass)] backdrop-blur-xl border border-[var(--border)] rounded-3xl p-8"
-          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <div className="text-center mb-8">
-            <div className="w-16 h-16 rounded-2xl bg-[var(--orange)]/20 flex items-center justify-center mx-auto mb-4">
-              <Lock size={26} className="text-[var(--orange)]" />
-            </div>
-            <h2 className="text-2xl font-black text-white">OrderFlow Dashboard</h2>
-            <p className="text-[var(--gray-600)] mt-1 text-sm">Enter password to continue</p>
-          </div>
-          <form onSubmit={handleLogin}>
-            <input type="password" value={password} onChange={(e) => { setPassword(e.target.value); setWrong(false); }}
-              placeholder="Password" autoFocus
-              className="w-full px-4 py-3 rounded-xl bg-white/5 border border-[var(--border)] text-white placeholder-[var(--gray-700)] focus:outline-none focus:border-[var(--orange)] transition-colors mb-3 text-center text-lg tracking-widest" />
-            {wrong && (
-              <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }}
-                className="text-red-400 text-sm text-center mb-3 flex items-center justify-center gap-1">
-                <X size={13} /> Incorrect password
-              </motion.p>
-            )}
-            <button type="submit" className="w-full py-3 rounded-xl bg-[var(--orange)] text-white font-bold hover:opacity-90 transition-opacity">
-              Unlock
-            </button>
-          </form>
-        </motion.div>
-      </main>
-    );
-  }
 
   // ─── Main Dashboard ────────────────────────────────────────
   return (
