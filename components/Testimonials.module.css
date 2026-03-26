@@ -1,0 +1,136 @@
+.section {
+  padding: 120px 24px;
+  overflow: hidden;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.title {
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: var(--white);
+}
+
+.carousel {
+  overflow: visible;
+  padding: 20px 0;
+  cursor: grab;
+}
+
+.carousel:active {
+  cursor: grabbing;
+}
+
+.track {
+  display: flex;
+  gap: 24px;
+}
+
+.card {
+  flex: 0 0 calc(33.333% - 16px);
+  min-width: 300px;
+  padding: 40px;
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.card.activeCard {
+  border-color: rgba(255, 107, 53, 0.3);
+  box-shadow: 0 0 40px rgba(255, 107, 53, 0.1);
+}
+
+.quoteIcon {
+  opacity: 0.3;
+}
+
+.stars {
+  display: flex;
+  gap: 4px;
+}
+
+.quote {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--gray-400);
+  font-style: normal;
+}
+
+.author {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: auto;
+}
+
+.authorName {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.authorBusiness {
+  font-size: 14px;
+  color: var(--orange);
+  font-weight: 600;
+}
+
+.authorLocation {
+  font-size: 13px;
+  color: var(--gray-600);
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 40px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dot.activeDot {
+  background: var(--orange);
+  width: 24px;
+  border-radius: 4px;
+}
+
+@media (max-width: 1024px) {
+  .card {
+    flex: 0 0 calc(50% - 12px);
+  }
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: 80px 20px;
+  }
+
+  .card {
+    flex: 0 0 calc(100% - 40px);
+    min-width: unset;
+  }
+}
