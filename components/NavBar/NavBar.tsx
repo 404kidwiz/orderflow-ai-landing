@@ -56,6 +56,9 @@ export default function NavBar() {
             <Phone size={16} />
             <span className="hidden sm:inline">+1 (770) 525-5393</span>
           </a>
+          <a href="#book-demo" className={styles.secondaryCta}>
+            Book a Demo
+          </a>
           <a href="#lead-form" className={styles.cta}>
             Start Free Trial
           </a>

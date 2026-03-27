@@ -5,7 +5,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Canvas, useFrame, useThree, ThreeElements } from "@react-three/fiber";
 import { Points, PointMaterial } from "@react-three/drei";
 import * as THREE from "three";
-import { Phone, Play, ChevronDown } from "lucide-react";
+import { Phone, Play, Calendar, ChevronDown } from "lucide-react";
 import styles from "./Hero.module.css";
 
 function Particles({ count = 2000 }) {
@@ -183,6 +183,10 @@ export default function Hero() {
           <a href="#demo" className={styles.ctaSecondary}>
             <Play size={16} fill="currentColor" />
             Watch Demo
+          </a>
+          <a href="#book-demo" className={styles.ctaSecondary}>
+            <Calendar size={16} fill="currentColor" />
+            Book a Demo
           </a>
         </motion.div>
 

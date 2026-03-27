@@ -17,6 +17,7 @@ import LeadForm from "@/components/LeadForm";
 import Footer from "@/components/Footer";
 import Cursor from "@/components/Cursor";
 import ScrollProgress from "@/components/ScrollProgress";
+import CalendlyModal from "@/components/CalendlyModal";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -54,6 +55,7 @@ export default function Home() {
         <FAQ />
         <LeadForm />
         <Footer />
+        <CalendlyModal />
       </main>
     </>
   );
