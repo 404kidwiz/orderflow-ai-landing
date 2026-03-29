@@ -1,8 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Phone, Play, ArrowRight, Clock, CheckCircle2 } from "lucide-react";
+import { Phone, CheckCircle2, Clock } from "lucide-react";
 
+// ── Terminal mockup — kept intact, adjusted for video background context ──
 function TerminalMockup() {
   return (
     <motion.div
@@ -11,24 +12,29 @@ function TerminalMockup() {
       transition={{ delay: 0.6, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       className="relative w-full max-w-md mx-auto lg:mx-0"
     >
-      {/* Terminal card */}
       <div
         className="rounded-2xl overflow-hidden"
         style={{
-          background: "var(--surface)",
-          border: "1px solid var(--border)",
-          boxShadow: "0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px var(--border), 0 0 60px rgba(59,130,246,0.08)",
+          background: "rgba(15, 21, 32, 0.85)",
+          border: "1px solid rgba(255, 255, 255, 0.10)",
+          boxShadow:
+            "0 32px 80px rgba(0,0,0,0.7), 0 0 60px rgba(59,130,246,0.06)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
         }}
       >
         {/* Terminal header */}
         <div
           className="flex items-center gap-2 px-5 py-4"
-          style={{ borderBottom: "1px solid var(--border)", background: "rgba(0,0,0,0.2)" }}
+          style={{
+            borderBottom: "1px solid rgba(255,255,255,0.08)",
+            background: "rgba(0,0,0,0.2)",
+          }}
         >
-          <div className="w-3 h-3 rounded-full" style={{ background: "#EF4444" }} />
-          <div className="w-3 h-3 rounded-full" style={{ background: "#F59E0B" }} />
-          <div className="w-3 h-3 rounded-full" style={{ background: "#22C55E" }} />
-          <span className="ml-3 text-xs" style={{ color: "var(--text-muted)" }}>
+          <div className="w-3 h-3 rounded-full bg-[#EF4444]" />
+          <div className="w-3 h-3 rounded-full bg-[#F59E0B]" />
+          <div className="w-3 h-3 rounded-full bg-[#22C55E]" />
+          <span className="ml-3 text-xs text-white/40">
             orderflow.ai/dashboard
           </span>
         </div>
@@ -38,7 +44,10 @@ function TerminalMockup() {
           {/* Incoming call indicator */}
           <motion.div
             className="flex items-center gap-3 p-4 rounded-xl"
-            style={{ background: "rgba(59,130,246,0.08)", border: "1px solid rgba(59,130,246,0.2)" }}
+            style={{
+              background: "rgba(59,130,246,0.08)",
+              border: "1px solid rgba(59,130,246,0.2)",
+            }}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.0, duration: 0.5 }}
@@ -47,19 +56,15 @@ function TerminalMockup() {
               className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
               style={{ background: "rgba(59,130,246,0.15)" }}
             >
-              <Phone size={18} style={{ color: "var(--accent)" }} />
+              <Phone size={18} className="text-[#3B82F6]" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
-                Incoming Call
-              </p>
-              <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-                (404) 555-0182
-              </p>
+              <p className="text-sm font-semibold text-white">Incoming Call</p>
+              <p className="text-xs text-white/40">(404) 555-0182</p>
             </div>
             <span
-              className="text-xs font-mono font-bold px-2 py-1 rounded"
-              style={{ background: "rgba(59,130,246,0.15)", color: "var(--accent)" }}
+              className="text-xs font-mono font-bold px-2 py-1 rounded text-[#3B82F6]"
+              style={{ background: "rgba(59,130,246,0.15)" }}
             >
               LIVE
             </span>
@@ -70,7 +75,7 @@ function TerminalMockup() {
             { item: "2× Crunchy Taco Supreme", status: "confirmed", time: "0:03" },
             { item: "1× Baja Blast Freeze (L)", status: "confirmed", time: "0:08" },
             { item: "1× Mexican Pizza", status: "confirmed", time: "0:12" },
-            { item: "+ AddNachos Supreme", status: "ai-suggested", time: "0:19" },
+            { item: "+ Add Nachos Supreme", status: "ai-suggested", time: "0:19" },
           ].map((row, i) => (
             <motion.div
               key={i}
@@ -81,21 +86,25 @@ function TerminalMockup() {
             >
               <CheckCircle2
                 size={14}
+                className="flex-shrink-0"
                 style={{
-                  color: row.status === "ai-suggested" ? "var(--accent)" : "#22C55E",
-                  flexShrink: 0,
+                  color:
+                    row.status === "ai-suggested" ? "#3B82F6" : "#22C55E",
                 }}
               />
               <span
                 className="text-sm flex-1"
                 style={{
-                  color: row.status === "ai-suggested" ? "var(--accent)" : "var(--text-primary)",
+                  color:
+                    row.status === "ai-suggested"
+                      ? "#3B82F6"
+                      : "rgba(240,244,255,1)",
                   fontWeight: row.status === "ai-suggested" ? 600 : 400,
                 }}
               >
                 {row.item}
               </span>
-              <span className="text-xs font-mono" style={{ color: "var(--text-muted)" }}>
+              <span className="text-xs font-mono text-white/40">
                 {row.time}
               </span>
             </motion.div>
@@ -104,31 +113,28 @@ function TerminalMockup() {
           {/* Order total */}
           <motion.div
             className="flex items-center justify-between pt-3 mt-2"
-            style={{ borderTop: "1px solid var(--border)" }}
+            style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.9, duration: 0.4 }}
           >
             <div className="flex items-center gap-2">
-              <Clock size={14} style={{ color: "var(--accent)" }} />
-              <span className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
+              <Clock size={14} className="text-[#3B82F6]" />
+              <span className="text-sm font-semibold text-white">
                 Order confirmed
               </span>
             </div>
-            <span className="text-sm font-black" style={{ color: "var(--accent)" }}>
-              $18.47
-            </span>
+            <span className="text-sm font-black text-[#3B82F6]">$18.47</span>
           </motion.div>
         </div>
       </div>
 
       {/* Floating accent badge */}
       <motion.div
-        className="absolute -bottom-4 -right-4 px-4 py-2 rounded-full text-xs font-bold"
+        className="absolute -bottom-4 -right-4 px-4 py-2 rounded-full text-xs font-bold text-[#3B82F6]"
         style={{
           background: "rgba(59,130,246,0.12)",
           border: "1px solid rgba(59,130,246,0.3)",
-          color: "var(--accent)",
         }}
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -140,126 +146,166 @@ function TerminalMockup() {
   );
 }
 
+// ── Pill button — layered construction per Web3 spec ──
+function PillButton({
+  variant,
+  label,
+  href,
+}: {
+  variant: "dark" | "light";
+  label: string;
+  href?: string;
+}) {
+  const isLight = variant === "light";
+  const Tag = href ? "a" : "button";
+
+  return (
+    <Tag
+      {...(href ? { href } : {})}
+      className="relative inline-flex rounded-full cursor-pointer no-underline"
+      style={{
+        padding: "0.6px",
+        border: "0.6px solid rgba(255,255,255,0.6)",
+      }}
+    >
+      {/* White glow streak along top edge */}
+      <span
+        className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px rounded-full"
+        style={{
+          background:
+            "radial-gradient(ellipse at center, rgba(255,255,255,0.75) 0%, transparent 70%)",
+          filter: "blur(1.5px)",
+        }}
+        aria-hidden="true"
+      />
+      <span
+        className="relative rounded-full text-[14px] font-medium transition-opacity hover:opacity-80 flex items-center"
+        style={{
+          padding: "11px 29px",
+          background: isLight ? "#ffffff" : "#000000",
+          color: isLight ? "#000000" : "#ffffff",
+        }}
+      >
+        {label}
+      </span>
+    </Tag>
+  );
+}
+
+// ── Hero — Web3 video bg merged with OrderFlow content ──
 export default function Hero() {
   return (
-    <section
-      className="relative min-h-screen flex items-center overflow-hidden pt-20 pb-12"
-      style={{ background: "var(--bg)" }}
-    >
-      <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 80% 60% at 60% 40%, rgba(59,130,246,0.05) 0%, transparent 60%)" }} />
+    <section className="relative min-h-screen overflow-hidden bg-black">
+      {/* Fullscreen looping background video */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover"
+        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260217_030345_246c0224-10a4-422c-b324-070b7c0eceda.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        aria-hidden="true"
+      />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-12 py-16">
+      {/* 50% black overlay for readability */}
+      <div className="absolute inset-0 bg-black/50" aria-hidden="true" />
+
+      {/* All content sits above the video */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-[120px] pt-32 pb-24 min-h-screen flex flex-col justify-center">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
           {/* Left — 55% */}
-          <div>
-            {/* Badge */}
+          <div className="flex flex-col gap-8">
+
+            {/* Badge pill */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1, duration: 0.5 }}
-              className="inline-flex items-center gap-2 mb-8"
             >
               <span
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold"
+                className="inline-flex items-center gap-2 px-4 py-2 text-[13px] font-medium"
                 style={{
-                  background: "var(--accent-dim)",
-                  border: "1px solid rgba(59,130,246,0.25)",
-                  color: "var(--accent)",
+                  background: "rgba(255,255,255,0.10)",
+                  border: "1px solid rgba(255,255,255,0.20)",
+                  borderRadius: "20px",
                 }}
               >
-                <span className="w-1.5 h-1.5 rounded-full" style={{ background: "var(--accent)" }} />
-                AI-Powered Voice Ordering
+                <span className="w-1 h-1 rounded-full bg-white flex-shrink-0" />
+                <span style={{ color: "rgba(255,255,255,0.60)" }}>
+                  Early access available from{" "}
+                </span>
+                <span className="text-white">May 1, 2026</span>
               </span>
             </motion.div>
 
-            {/* Headline — 3 lines, pain point */}
+            {/* Gradient headline — 144.5deg white → transparent */}
             <motion.h1
-              className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.0] tracking-tight mb-6"
-              style={{ color: "var(--text-primary)" }}
+              className="text-[56px] max-md:text-[36px] font-medium leading-[1.28] tracking-tight max-w-[613px]"
+              style={{
+                background:
+                  "linear-gradient(144.5deg, #ffffff 28%, rgba(0,0,0,0) 115%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             >
-              Missed calls
-              <br />
-              <span style={{ color: "var(--accent)" }}>cost you</span>{" "}
-              orders.
-              <br />
-              <span style={{ color: "var(--text-muted)", fontWeight: 300 }}>
-                Not anymore.
-              </span>
+              Take Orders While You Sleep
             </motion.h1>
 
-            {/* Subhead */}
+            {/* Subtitle */}
             <motion.p
-              className="text-lg leading-relaxed mb-10 max-w-md"
-              style={{ color: "var(--text-muted)" }}
+              className="text-[15px] font-normal leading-relaxed max-w-[500px] -mt-2"
+              style={{ color: "rgba(255,255,255,0.70)" }}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.6 }}
             >
-              OrderFlow answers every call with natural AI conversation. Takes the order. Handles modifications. Texts confirmation. You focus on the food.
+              The AI voice agent that answers every call, upsells naturally,
+              and delivers — 24/7. No app downloads. No new phone number.
+              Live in 30 seconds.
             </motion.p>
 
-            {/* CTAs */}
+            {/* CTA buttons */}
             <motion.div
-              className="flex flex-wrap gap-4"
+              className="flex flex-wrap items-center gap-4"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.6 }}
             >
-              <a
-                href="#lead-form"
-                className="inline-flex items-center gap-2.5 px-7 py-4 rounded-full text-sm font-bold transition-all duration-200"
-                style={{
-                  background: "var(--accent)",
-                  color: "white",
-                  boxShadow: "0 8px 32px rgba(59,130,246,0.35)",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.boxShadow = "0 12px 40px rgba(59,130,246,0.5)")}
-                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "0 8px 32px rgba(59,130,246,0.35)")}
-              >
-                Start Free Trial
-                <ArrowRight size={16} />
-              </a>
-              <a
-                href="#demo"
-                className="inline-flex items-center gap-2.5 px-7 py-4 rounded-full text-sm font-bold transition-all duration-200"
-                style={{
-                  background: "transparent",
-                  color: "var(--text-primary)",
-                  border: "1px solid var(--border-strong)",
-                }}
-              >
-                <Play size={14} />
-                Watch Demo
-              </a>
+              <PillButton variant="light" label="Start Free Trial" href="#lead-form" />
+              <PillButton variant="dark" label="Book a Demo" href="#book-demo" />
             </motion.div>
 
             {/* Phone CTA */}
             <motion.div
-              className="mt-6"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.7, duration: 0.5 }}
             >
               <a
                 href="tel:+17705255393"
-                className="inline-flex items-center gap-2 text-sm"
-                style={{ color: "var(--text-muted)" }}
+                className="inline-flex items-center gap-2 text-sm transition-opacity hover:opacity-80"
+                style={{ color: "rgba(255,255,255,0.50)" }}
               >
-                <Phone size={14} style={{ color: "var(--accent)" }} />
+                <Phone
+                  size={14}
+                  style={{ color: "rgba(255,255,255,0.70)" }}
+                />
                 Or call us:{" "}
-                <span className="font-semibold" style={{ color: "var(--text-primary)" }}>
+                <span className="font-semibold text-white">
                   +1 (770) 525-5393
                 </span>
               </a>
             </motion.div>
+
           </div>
 
-          {/* Right — 45% */}
-          <div className="relative">
+          {/* Right — 45% terminal mockup */}
+          <div className="relative hidden lg:block">
             <TerminalMockup />
           </div>
 

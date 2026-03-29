@@ -1,176 +1,180 @@
-# OrderFlow AI - Project Summary
+# OrderFlow AI — Project Summary
 
-## Overview
-OrderFlow AI is an AI-powered voice ordering system for restaurants. Customers call a dedicated phone number, and an AI agent (powered by Llama 3.3 70B) takes their order naturally — up-selling, handling modifications, and sending orders directly to the kitchen.
+**Last Updated:** 2026-03-29
+
+---
+
+## Live Deployment
+- **Landing Page:** https://orderflow-ai.pages.dev
+- **Repo:** https://github.com/404kidwiz/orderflow-ai-landing
+
+---
+
+## Stitch Design Source
+
+**Stitch Project ID:** `13054754492898134388`
+**Design Direction:** `Obsidian Luxe`
+
+All Stitch design files are stored in `.stitch/`:
+
+```
+.stitch/
+├── DESIGN.md                    # Full design system spec
+├── reference-landing.html       # Stitch HTML export (landing)
+├── reference-landing-v2.html    # Stitch HTML export (landing v2)
+├── reference-dashboard.html     # Stitch HTML export (dashboard)
+└── references/
+    ├── BACKEND_SETUP_GUIDE.md   # Backend architecture docs
+    ├── DEPLOYMENT.md            # Deployment instructions
+    ├── PRODUCT.md               # Product specs
+    └── PRD_IMPLEMENTATION_PLAN.md  # Implementation roadmap
+```
+
+### Obsidian Luxe Design System
+
+| Token | Hex | Use |
+|---|---|---|
+| Smoked Obsidian | `#131313` | Primary background |
+| Obsidian Low | `#1C1B1B` | Section groupings |
+| Obsidian Mid | `#201F1F` | Card surfaces |
+| Obsidian High | `#2A2A2A` | Hover/active states |
+| Obsidian Highest | `#353534` | Floating panels |
+| Ember Orange | `#FF4500` | Primary CTA, urgent actions |
+| Ember Soft | `#FFB5A0` | Secondary accents |
+| Signal Violet | `#8A2BE2` | AI/Intelligence moments |
+| Signal Violet Soft | `#DCB8FF` | AI highlights |
+| Readable Warm White | `#E5E2E1` | Main text |
+| Warm Secondary Text | `#E7BDB2` | Secondary copy |
+| Ghost Outline | `#5D4038` | Subtle borders |
+
+**Typography:**
+- Headlines: `Noto Serif` (premium, editorial)
+- Body: `Manrope` (data, interface)
+
+---
+
+## What It Is
+
+OrderFlow AI is an AI Employee Staffing platform — a SaaS landing page that sells AI workers ("AI Employees") to businesses at $997/month. The landing page follows a full-funnel strategy: social proof → process → features → pricing → FAQ → lead capture.
+
+**Target customer:** Home services (HVAC/Plumbing/Electricians), Real Estate Agents, Law Firms, Financial Advisors
+**Core pitch:** "Build & Delegate to AI Employees" — scalable workforce without hiring overhead
+**Revenue goal:** $20K/month by May 2026 | $100K/month by December 2026
+
+---
 
 ## Tech Stack
 
-### Landing Page v2 (2026-03-26)
-- **Framework:** Next.js 14.2.21 (downgraded from 15 for R3F compatibility)
-- **React:** 18.3.1
-- **Animation:** Framer Motion 11.x + GSAP 3.12 + ScrollTrigger
-- **Smooth Scroll:** Lenis 1.1.x
-- **3D:** React Three Fiber + Drei + Three.js
-- **Styling:** CSS Modules + Tailwind CSS 4.x
-- **UI Primitives:** Radix UI (Accordion, Toggle, Select, Dialog)
-- **Gestures:** @use-gesture/react
+| Layer | Tech |
+|---|---|
+| Frontend | Next.js 14, TypeScript, Tailwind CSS, Framer Motion |
+| Animations | Framer Motion — scroll-triggered, staggered, morphing |
+| Deployment | Cloudflare Pages |
+| Forms | Lead capture via API |
+| Design | Stitch "OrderFlow AI Design System v1.0" |
 
-### Backend (Reference)
-- **API:** FastAPI (Python)
-- **LLM:** Llama 3.3 70B via OpenRouter
-- **Session:** Upstash Redis
-- **Database:** Neon PostgreSQL (planned)
-- **Voice:** Twilio
+---
 
-## Project Structure
-```
-orderflow-ai/
-├── landing-v2/                 # Next.js 14 landing page
-│   ├── app/
-│   │   ├── globals.css        # Global styles + CSS variables
-│   │   ├── layout.tsx         # Root layout
-│   │   └── page.tsx           # Main page
-│   ├── components/
-│   │   ├── NavBar/            # Fixed navigation with mobile menu
-│   │   ├── Hero.tsx           # 3D particle background + scroll animations
-│   │   ├── TrustBar.tsx       # Logo marquee
-│   │   ├── LiveDemo.tsx       # Interactive chat simulation
-│   │   ├── HowItWorks.tsx     # Horizontal scroll narrative
-│   │   ├── Features.tsx       # Scroll-triggered staggered grid
-│   │   ├── Stats.tsx          # Count-up rings with animated arcs
-│   │   ├── Testimonials.tsx   # 3D carousel with drag
-│   │   ├── Pricing.tsx        # 3-tier pricing with toggle
-│   │   ├── FAQ.tsx            # Radix accordion
-│   │   ├── LeadForm.tsx       # Contact form with validation
-│   │   └── Footer.tsx         # Links + social
-│   ├── lib/
-│   │   ├── smooth-scroll.ts   # Lenis initialization
-│   │   ├── scroll-animations.ts # GSAP + ScrollTrigger setup
-│   │   ├── animations.ts      # Framer Motion variants
-│   │   └── three-jsx.d.ts     # R3F type declarations
-│   └── netlify.toml           # Netlify config with Next.js plugin
-├── src/                       # Python FastAPI backend
-│   ├── api/                   # FastAPI routes
-│   ├── llm/                   # LLM providers + router
-│   ├── session.py             # Redis session manager
-│   ├── config.py              # Restaurant configuration
-│   └── main.py                # Entry point
-├── assets/                    # AI-generated images
-└── BACKEND_SETUP_GUIDE.md     # Deployment instructions
-```
+## Screens / Sections
 
-## Key Features Implemented
+| Section | Description |
+|---|---|
+| **AnimatedNavbar** | Sticky, scrolls to solid, blur backdrop, logo + links + "Get Started" CTA |
+| **Hero** | "Build & Delegate to AI Employees" headline, subtext, 3-step snippet, dual CTAs, floating AI dashboard preview |
+| **LogoMarquee** | Scrolling logos: Stripe, Linear, Notion, Vercel, Shopify, Airbnb, Uber, DoorDash |
+| **SocialProof** | "Trusted by 500+ Businesses", testimonial cards with avatar, rating, quote |
+| **HowItWorks** | 6-step horizontal scroll or numbered grid: Hire → Onboard → Delegate → AI Works → Review → Scale |
+| **Features** | 3-column grid, icon + title + description, hover lift effect |
+| **FAQ** | Accordion, 5 questions, smooth expand/collapse |
+| **CTA** | Full-width gradient banner, "Ready to Scale?" headline, email input + button |
+| **Footer** | Logo, tagline, copyright |
 
-### Hero Section
-- React Three Fiber particle system (2000 particles on desktop, 500 on mobile)
-- Scroll-driven text reveal with spring physics
-- Parallax depth layers via GSAP ScrollTrigger
-- Floating phone mockup with cursor tracking
-- Ambient glow following cursor position
-- Animated scroll indicator with progress ring
+---
 
-### Live Demo Section
-- Auto-playing message simulation
-- Interactive user input (type your own order)
-- Typing indicator with typewriter effect
-- Animated waveform bars during AI response
-- Order confirmation card with spring bounce
-
-### How It Works
-- Sticky horizontal scroll narrative
-- Three panels: Customer Calls → AI Takes Order → Kitchen Gets It
-- SVG connection line animations
-
-### Features Grid
-- Scroll-triggered staggered entrance
-- Hover lift + glow bar animation
-- 8 feature cards in responsive grid
-
-### Stats Section
-- Custom count-up hook with easeOutExpo
-- SVG ring/arc animation
-- 4 stats: 500+ Restaurants, 3M+ Orders, 99.7% Uptime, 23% Avg Increase
-
-### Testimonials
-- 3D carousel with perspective
-- Auto-rotate every 5 seconds
-- Drag/swipe with momentum
-- Active card scaling + orange glow
-
-### Pricing
-- Monthly/Annual toggle with discount
-- 3 tiers: Starter ($97), Growth ($197), Enterprise ($497)
-- Popular badge on Growth plan
-
-### FAQ
-- Radix UI Accordion
-- Smooth expand/collapse animations
-
-### Lead Form
-- Input fields: Name, Email, Phone, Restaurant (optional)
-- Form validation
-- Loading state + success animation
-
-## Design System
+## Design System — "OrderFlow AI v1.0"
 
 ### Colors
-```css
---void: #0a0a0f;           /* Background */
---void-light: #111118;     /* Card backgrounds */
---orange: #FF6B35;         /* Primary accent */
---orange-glow: #FF8C5A;    /* Gradient accent */
---purple: #7C3AED;         /* Secondary accent */
---white: #FFFFFF;          /* Primary text */
---gray-400: #9CA3AF;       /* Secondary text */
---gray-600: #4B5563;       /* Tertiary text */
---glass: rgba(255,255,255,0.04);
---border: rgba(255,255,255,0.08);
---border-hover: rgba(255,255,255,0.12);
-```
+| Token | Hex | Use |
+|---|---|---|
+| Deep Indigo | `#0B0B1A` | Background |
+| Electric Purple | `#8B5CF6` | Primary CTA, accents |
+| Mint Green | `#10B981` | Success, highlights |
+| Pure White | `#FFFFFF` | Text, surfaces |
+| Amber Gold | `#F59E0B` | Ratings, badges |
+| Coral Red | `#EF4444` | Errors, urgency |
+| Light Gray | `#F3F4F6` | Secondary backgrounds |
 
 ### Typography
-- **Headings:** Inter (900 weight)
-- **Body:** Inter (400, 500, 600 weights)
-- **Monospace:** JetBrains Mono (for stats)
+- **Headings:** Outfit (Google Fonts) — geometric, modern
+- **Body:** DM Sans (Google Fonts) — clean, readable
 
-### Spacing
-- Base unit: 4px
-- Section padding: 120px (80px on mobile)
-- Card padding: 32px
-- Grid gap: 20px
+### Buttons
+- Gradient: `linear-gradient(135deg, #8B5CF6, #6366F1)`
+- Rounded: `rounded-full`
+- Hover: scale up slightly, shadow deepens
+- Transitions: 300ms ease
 
 ### Animations
-- Primary spring: `{ stiffness: 100, damping: 15 }`
-- Reveal duration: 0.6s
-- Micro-interactions: 0.2-0.3s
-- Stagger delay: 0.07-0.12s between items
+- **Scroll reveals:** opacity 0→1, y 20→0, 600ms ease-out, staggered 100ms
+- **Hover lifts:** y -4px, shadow increase
+- **Logo marquee:** continuous horizontal scroll, 30s linear
+- **FAQ accordion:** height auto transition, 300ms ease
+- **CTA gradient:** background-position shift on hover
+
+---
+
+## Stitch Design Source
+
+The Stitch design spec is in `.stitch/DESIGN.md` with full color tokens, typography rules, component specs, animation timings, and layout measurements.
+
+```
+Asset locations:
+.stitch/DESIGN.md                              — Full design spec
+.stitch/references/tool-schemas.md             — Component/feature definitions
+.stitch/references/design-mappings.md          — Screen-to-component mapping
+.stitch/references/chatbot-wf-screenshots/     — Stitch UI screenshots
+```
+
+---
+
+## Git History (recent)
+
+| Commit | Description |
+|---|---|
+| `b9a3e0d` | feat: redesign Hero, Features, Pricing, Testimonials, Calendly modal, TrustBar |
+| `f73a291` | chore: deps upgrade next@14.2.15 react@19 |
+| `7da3f1e` | feat: add Calendly demo booking modal + Book a Demo button |
+| `9c4f2a1` | feat: FAQ accordion with smooth open/close animations |
+| `3e7eb10` | feat: initial full-stack Next.js 14 landing + dashboard |
+
+---
 
 ## Deployment
 
-### Landing Page (Cloudflare Pages)
-- URL: https://orderflow-ai.pages.dev
-- Config: Wrangler CLI (`wrangler pages deploy`)
-- Build: `pnpm build`
-- Publish: `.next` (static export)
-- Note: Switched from Netlify to Cloudflare Pages (2026-03-29) due to Netlify rate limits on the free tier.
+```bash
+cd /Users/404kidwiz/projects/orderflow-ai-landing
 
-### Backend (Railway) - Pending
-- Requires: Railway account, Upstash Redis, Neon PostgreSQL
-- See: `BACKEND_SETUP_GUIDE.md`
+# Build
+pnpm build
 
-## Known Issues
-- React 19 incompatibility with R3F/Framer Motion → using React 18.3.1
-- Next.js 15 build fails with static generation → using Next.js 14.2.21
+# Deploy
+npx wrangler pages deploy .next --project-name=orderflow-ai
+```
 
-## Next Steps
-1. Deploy Next.js 14 build to Netlify
-2. Connect Railway backend with credentials
-3. Set up Twilio webhook to new backend
-4. Test live demo phone number
+---
 
-## Files Modified (2026-03-26)
-- All components rewritten with full animations
-- CSS Modules for each component
-- Lenis smooth scroll integration
-- GSAP ScrollTrigger for scroll-driven effects
-- React Three Fiber for 3D hero background
+## 13 Revenue Plays (404 Technologies)
+
+1. AI Employee Staffing Model ($997/mo per AI worker, $800 profit)
+2. AI Phone Agent Implementation ($997 setup + $497/mo management)
+3. Web Design Arbitrage ($1,500/site, $18K/mo potential)
+4. LinkedIn Profile Pipeline ($197-997/profile)
+5. Podcast Production Pipeline ($300-500/episode)
+6. AI Recruiter ($500-2K/placement)
+7. AI Grant Writer ($500-1,500/grant application)
+8. AI Form Filler for Law Firms ($297-997/document)
+9. AI Course Creator ($2-5K/course)
+10. Local Business Review Manager ($297-497/mo per location)
+11. Fiverr Gigs (Audio stems, Lead scrape, UI prototypes)
+12. Local SEO Autopilot ($1K/mo retainer)
+13. Micro-SaaS Flipper ($2-10K per flip)
