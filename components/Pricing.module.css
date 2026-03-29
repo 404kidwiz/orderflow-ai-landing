@@ -1,6 +1,6 @@
 .section {
   padding: 120px 24px;
-  background: linear-gradient(180deg, transparent, rgba(255,107,53,0.02), transparent);
+  background: var(--bg);
 }
 
 .container {
@@ -51,9 +51,9 @@
 .toggleKnob {
   width: 22px;
   height: 22px;
-  background: var(--orange);
+  background: var(--accent);
   border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.4);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
 }
 
 .activeLabel {
@@ -82,9 +82,7 @@
 .card {
   position: relative;
   padding: 40px 32px;
-  background: var(--glass);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 24px;
   display: flex;
@@ -93,17 +91,10 @@
 }
 
 .card.popular {
-  border-color: rgba(255, 107, 53, 0.4);
-  background: linear-gradient(180deg, rgba(255,107,53,0.08) 0%, var(--glass) 100%);
+  border-color: rgba(59, 130, 246, 0.5);
   transform: scale(1.02);
-  /* Animated gradient border */
-  background-image: linear-gradient(var(--void-light), var(--void-light)),
-    linear-gradient(135deg, var(--orange), var(--purple), var(--orange));
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
-  border: 2px solid transparent;
-  background-size: 200% 200%;
-  animation: gradient-shift 3s ease infinite;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.4), 0 0 40px rgba(59, 130, 246, 0.15), 0 24px 64px rgba(0, 0, 0, 0.4);
+  background: var(--surface);
 }
 
 @keyframes gradient-shift {
@@ -120,7 +111,7 @@
   align-items: center;
   gap: 6px;
   padding: 6px 16px;
-  background: var(--orange);
+  background: var(--accent);
   color: white;
   font-size: 12px;
   font-weight: 700;
@@ -225,14 +216,14 @@
 }
 
 .ctaPopular {
-  background: linear-gradient(135deg, var(--orange) 0%, #FF8C5A 100%);
+  background: var(--accent);
   color: white;
   border: none;
-  box-shadow: 0 8px 30px rgba(255, 107, 53, 0.35);
+  box-shadow: 0 8px 30px rgba(59, 130, 246, 0.35);
 }
 
 .ctaPopular:hover {
-  box-shadow: 0 12px 40px rgba(255, 107, 53, 0.45);
+  box-shadow: 0 12px 40px rgba(59, 130, 246, 0.5);
 }
 
 .note {

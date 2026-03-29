@@ -1,209 +1,270 @@
 "use client";
 
-import { useRef, useEffect, Suspense } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { Canvas, useFrame, useThree, ThreeElements } from "@react-three/fiber";
-import { Points, PointMaterial } from "@react-three/drei";
-import * as THREE from "three";
-import { Phone, Play, Calendar, ChevronDown } from "lucide-react";
-import styles from "./Hero.module.css";
+import { motion } from "framer-motion";
+import { Phone, Play, ArrowRight, Clock, CheckCircle2 } from "lucide-react";
 
-function Particles({ count = 2000 }) {
-  const ref = useRef<THREE.Points>(null);
-  const { viewport } = useThree();
-  const scroll = useScroll();
-
-  const scrollProgress = scroll.scrollYProgress;
-
-  useFrame((state) => {
-    if (!ref.current) return;
-    const time = state.clock.getElapsedTime();
-    const positions = (ref.current.geometry.attributes.position as THREE.BufferAttribute).array as Float32Array;
-    const count = positions.length / 3;
-
-    for (let i = 0; i < count; i++) {
-      const i3 = i * 3;
-      const x = positions[i3];
-      const y = positions[i3 + 1];
-      const z = positions[i3 + 2];
-
-      // Wave pattern
-      positions[i3 + 1] = y + Math.sin(time * 0.5 + x * 0.5) * 0.02;
-
-      // Scatter on scroll
-      const scatterAmount = scrollProgress.get() * 2;
-      positions[i3] = x + Math.sin(time * 0.3 + i) * 0.01 * scatterAmount;
-      positions[i3 + 2] = z + Math.cos(time * 0.3 + i) * 0.01 * scatterAmount;
-    }
-    ref.current.geometry.attributes.position.needsUpdate = true;
-  });
-
-  // Generate points in a wave/soundwave pattern
-  const positions = new Float32Array(count * 3);
-  for (let i = 0; i < count; i++) {
-    const i3 = i * 3;
-    const t = (i / count) * Math.PI * 4;
-    positions[i3] = (Math.random() - 0.5) * viewport.width * 2;
-    positions[i3 + 1] = Math.sin(t) * (1 + Math.random()) * 2;
-    positions[i3 + 2] = (Math.random() - 0.5) * 4;
-  }
-
-  return (
-    <Points ref={ref} positions={positions} stride={3} frustumCulled={false}>
-      <PointMaterial
-        transparent
-        color="#FF6B35"
-        size={0.04}
-        sizeAttenuation
-        depthWrite={false}
-        opacity={0.6}
-      />
-    </Points>
-  );
-}
-
-function AmbientOrbs() {
-  return (
-    <div className={styles.orbs} aria-hidden="true">
-      <div className={`${styles.orb} ${styles.orbOrange}`} />
-      <div className={`${styles.orb} ${styles.orbPurple}`} />
-    </div>
-  );
-}
-
-function ScrollIndicator() {
+function TerminalMockup() {
   return (
     <motion.div
-      className={styles.scrollIndicator}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 2, duration: 0.6 }}
+      initial={{ opacity: 0, x: 40 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.6, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      className="relative w-full max-w-md mx-auto lg:mx-0"
     >
-      <span className={styles.scrollText}>Scroll to explore</span>
-      <motion.div
-        animate={{ y: [0, 8, 0] }}
-        transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+      {/* Terminal card */}
+      <div
+        className="rounded-2xl overflow-hidden"
+        style={{
+          background: "var(--surface)",
+          border: "1px solid var(--border)",
+          boxShadow: "0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px var(--border), 0 0 60px rgba(59,130,246,0.08)",
+        }}
       >
-        <ChevronDown size={20} color="rgba(255,255,255,0.4)" />
+        {/* Terminal header */}
+        <div
+          className="flex items-center gap-2 px-5 py-4"
+          style={{ borderBottom: "1px solid var(--border)", background: "rgba(0,0,0,0.2)" }}
+        >
+          <div className="w-3 h-3 rounded-full" style={{ background: "#EF4444" }} />
+          <div className="w-3 h-3 rounded-full" style={{ background: "#F59E0B" }} />
+          <div className="w-3 h-3 rounded-full" style={{ background: "#22C55E" }} />
+          <span className="ml-3 text-xs" style={{ color: "var(--text-muted)" }}>
+            orderflow.ai/dashboard
+          </span>
+        </div>
+
+        {/* Terminal content */}
+        <div className="p-6 space-y-4">
+          {/* Incoming call indicator */}
+          <motion.div
+            className="flex items-center gap-3 p-4 rounded-xl"
+            style={{ background: "rgba(59,130,246,0.08)", border: "1px solid rgba(59,130,246,0.2)" }}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.0, duration: 0.5 }}
+          >
+            <div
+              className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+              style={{ background: "rgba(59,130,246,0.15)" }}
+            >
+              <Phone size={18} style={{ color: "var(--accent)" }} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
+                Incoming Call
+              </p>
+              <p className="text-xs" style={{ color: "var(--text-muted)" }}>
+                (404) 555-0182
+              </p>
+            </div>
+            <span
+              className="text-xs font-mono font-bold px-2 py-1 rounded"
+              style={{ background: "rgba(59,130,246,0.15)", color: "var(--accent)" }}
+            >
+              LIVE
+            </span>
+          </motion.div>
+
+          {/* Order items */}
+          {[
+            { item: "2× Crunchy Taco Supreme", status: "confirmed", time: "0:03" },
+            { item: "1× Baja Blast Freeze (L)", status: "confirmed", time: "0:08" },
+            { item: "1× Mexican Pizza", status: "confirmed", time: "0:12" },
+            { item: "+ AddNachos Supreme", status: "ai-suggested", time: "0:19" },
+          ].map((row, i) => (
+            <motion.div
+              key={i}
+              className="flex items-center gap-3 py-2"
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 1.2 + i * 0.15, duration: 0.4 }}
+            >
+              <CheckCircle2
+                size={14}
+                style={{
+                  color: row.status === "ai-suggested" ? "var(--accent)" : "#22C55E",
+                  flexShrink: 0,
+                }}
+              />
+              <span
+                className="text-sm flex-1"
+                style={{
+                  color: row.status === "ai-suggested" ? "var(--accent)" : "var(--text-primary)",
+                  fontWeight: row.status === "ai-suggested" ? 600 : 400,
+                }}
+              >
+                {row.item}
+              </span>
+              <span className="text-xs font-mono" style={{ color: "var(--text-muted)" }}>
+                {row.time}
+              </span>
+            </motion.div>
+          ))}
+
+          {/* Order total */}
+          <motion.div
+            className="flex items-center justify-between pt-3 mt-2"
+            style={{ borderTop: "1px solid var(--border)" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.9, duration: 0.4 }}
+          >
+            <div className="flex items-center gap-2">
+              <Clock size={14} style={{ color: "var(--accent)" }} />
+              <span className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
+                Order confirmed
+              </span>
+            </div>
+            <span className="text-sm font-black" style={{ color: "var(--accent)" }}>
+              $18.47
+            </span>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Floating accent badge */}
+      <motion.div
+        className="absolute -bottom-4 -right-4 px-4 py-2 rounded-full text-xs font-bold"
+        style={{
+          background: "rgba(59,130,246,0.12)",
+          border: "1px solid rgba(59,130,246,0.3)",
+          color: "var(--accent)",
+        }}
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 2.2, duration: 0.4 }}
+      >
+        ⚡ Order placed in 23 seconds
       </motion.div>
     </motion.div>
   );
 }
 
-const HEADLINE = ["Take Orders", "While You Sleep"];
-
 export default function Hero() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
-  });
-
-  const textY = useTransform(scrollYProgress, [0, 1], [0, -120]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
-
   return (
-    <section ref={containerRef} className={styles.hero}>
-      {/* 3D Canvas Background */}
-      <div className={styles.canvasBg}>
-        <Canvas camera={{ position: [0, 0, 5], fov: 60 }}>
-          <Suspense fallback={null}>
-            <Particles count={typeof window !== "undefined" && window.innerWidth < 768 ? 500 : 2000} />
-          </Suspense>
-        </Canvas>
-      </div>
+    <section
+      className="relative min-h-screen flex items-center overflow-hidden pt-20 pb-12"
+      style={{ background: "var(--bg)" }}
+    >
+      <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 80% 60% at 60% 40%, rgba(59,130,246,0.05) 0%, transparent 60%)" }} />
 
-      <AmbientOrbs />
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-12 py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
-      {/* Grid overlay */}
-      <div className={styles.gridOverlay} aria-hidden="true" />
+          {/* Left — 55% */}
+          <div>
+            {/* Badge */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.5 }}
+              className="inline-flex items-center gap-2 mb-8"
+            >
+              <span
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold"
+                style={{
+                  background: "var(--accent-dim)",
+                  border: "1px solid rgba(59,130,246,0.25)",
+                  color: "var(--accent)",
+                }}
+              >
+                <span className="w-1.5 h-1.5 rounded-full" style={{ background: "var(--accent)" }} />
+                AI-Powered Voice Ordering
+              </span>
+            </motion.div>
 
-      {/* Content */}
-      <motion.div className={styles.content} style={{ y: textY, opacity, scale }}>
-        {/* Badge */}
-        <motion.div
-          className={styles.badge}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.6 }}
-        >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M8 1L10 5.5L15 6L11.5 9.5L12.5 14.5L8 12L3.5 14.5L4.5 9.5L1 6L6 5.5L8 1Z" fill="#FF6B35" />
-          </svg>
-          <span>Trusted by 500+ restaurants across Atlanta</span>
-        </motion.div>
+            {/* Headline — 3 lines, pain point */}
+            <motion.h1
+              className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.0] tracking-tight mb-6"
+              style={{ color: "var(--text-primary)" }}
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            >
+              Missed calls
+              <br />
+              <span style={{ color: "var(--accent)" }}>cost you</span>{" "}
+              orders.
+              <br />
+              <span style={{ color: "var(--text-muted)", fontWeight: 300 }}>
+                Not anymore.
+              </span>
+            </motion.h1>
 
-        {/* Headline */}
-        <h1 className={styles.headline}>
-          {HEADLINE.map((line, lineIndex) => (
-            <span key={lineIndex} className={styles.headlineLine}>
-              {line.split(" ").map((word, wordIndex) => (
-                <span key={wordIndex} className={styles.wordWrapper}>
-                  <motion.span
-                    className={styles.word}
-                    initial={{ opacity: 0, y: 40, rotateX: -40 }}
-                    animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                    transition={{
-                      delay: 0.5 + lineIndex * 0.2 + wordIndex * 0.08,
-                      duration: 0.7,
-                      ease: [0.22, 1, 0.36, 1],
-                    }}
-                  >
-                    {word}
-                  </motion.span>
+            {/* Subhead */}
+            <motion.p
+              className="text-lg leading-relaxed mb-10 max-w-md"
+              style={{ color: "var(--text-muted)" }}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
+            >
+              OrderFlow answers every call with natural AI conversation. Takes the order. Handles modifications. Texts confirmation. You focus on the food.
+            </motion.p>
+
+            {/* CTAs */}
+            <motion.div
+              className="flex flex-wrap gap-4"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+            >
+              <a
+                href="#lead-form"
+                className="inline-flex items-center gap-2.5 px-7 py-4 rounded-full text-sm font-bold transition-all duration-200"
+                style={{
+                  background: "var(--accent)",
+                  color: "white",
+                  boxShadow: "0 8px 32px rgba(59,130,246,0.35)",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.boxShadow = "0 12px 40px rgba(59,130,246,0.5)")}
+                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "0 8px 32px rgba(59,130,246,0.35)")}
+              >
+                Start Free Trial
+                <ArrowRight size={16} />
+              </a>
+              <a
+                href="#demo"
+                className="inline-flex items-center gap-2.5 px-7 py-4 rounded-full text-sm font-bold transition-all duration-200"
+                style={{
+                  background: "transparent",
+                  color: "var(--text-primary)",
+                  border: "1px solid var(--border-strong)",
+                }}
+              >
+                <Play size={14} />
+                Watch Demo
+              </a>
+            </motion.div>
+
+            {/* Phone CTA */}
+            <motion.div
+              className="mt-6"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.7, duration: 0.5 }}
+            >
+              <a
+                href="tel:+17705255393"
+                className="inline-flex items-center gap-2 text-sm"
+                style={{ color: "var(--text-muted)" }}
+              >
+                <Phone size={14} style={{ color: "var(--accent)" }} />
+                Or call us:{" "}
+                <span className="font-semibold" style={{ color: "var(--text-primary)" }}>
+                  +1 (770) 525-5393
                 </span>
-              ))}
-            </span>
-          ))}
-        </h1>
+              </a>
+            </motion.div>
+          </div>
 
-        {/* Subheadline */}
-        <motion.p
-          className={styles.sub}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.0, duration: 0.6 }}
-        >
-          The AI voice agent that answers calls, up sells, and delivers — 24/7.
-          <br className="hidden sm:block" />
-          Zero app downloads. No new phone number needed.
-        </motion.p>
+          {/* Right — 45% */}
+          <div className="relative">
+            <TerminalMockup />
+          </div>
 
-        {/* CTAs */}
-        <motion.div
-          className={styles.ctas}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 0.6 }}
-        >
-          <a href="#lead-form" className={styles.ctaPrimary}>
-            Start Free Trial
-          </a>
-          <a href="#demo" className={styles.ctaSecondary}>
-            <Play size={16} fill="currentColor" />
-            Watch Demo
-          </a>
-          <a href="#book-demo" className={styles.ctaSecondary}>
-            <Calendar size={16} fill="currentColor" />
-            Book a Demo
-          </a>
-        </motion.div>
-
-        {/* Phone number */}
-        <motion.a
-          href="tel:+17705255393"
-          className={styles.phoneCta}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.4, duration: 0.6 }}
-        >
-          <Phone size={16} />
-          Call +1 (770) 525-5393 — Live Demo
-        </motion.a>
-      </motion.div>
-
-      <ScrollIndicator />
+        </div>
+      </div>
     </section>
   );
 }

@@ -10,7 +10,8 @@ interface CalendlyModalProps {
 
 export default function CalendlyModal({ url }: CalendlyModalProps) {
   // Replace with your Calendly link, e.g. "https://calendly.com/yourusername/30min"
-  const calendlyUrl = url || "https://calendly.com";
+  const calendlyUrl = url;
+  const hasCalendlyUrl = url && url.includes("calendly.com");
 
   useEffect(() => {
     const handleHash = () => {
@@ -88,12 +89,36 @@ export default function CalendlyModal({ url }: CalendlyModalProps) {
 
           {/* Calendly Embed */}
           <div className="w-full h-[680px] p-2">
-            <iframe
-              src={`${calendlyUrl}?hide_gdpr_banner=1&primary_color=ff6b35`}
-              className="w-full h-full rounded-2xl border-0"
-              title="Book a Demo"
-              allow="camera; microphone; autoplay; encrypted-media"
-            />
+            {hasCalendlyUrl ? (
+              <iframe
+                src={`${calendlyUrl}?hide_gdpr_banner=1&primary_color=ff6b35`}
+                className="w-full h-full rounded-2xl border-0"
+                title="Book a Demo"
+                allow="camera; microphone; autoplay; encrypted-media"
+              />
+            ) : (
+              <div className="w-full h-full rounded-2xl border border-[var(--border)] flex flex-col items-center justify-center text-center p-8" style={{ background: "var(--surface)" }}>
+                <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6" style={{ background: "rgba(59,130,246,0.1)", border: "1px solid rgba(59,130,246,0.2)" }}>
+                  <Calendar size={28} style={{ color: "var(--accent)" }} />
+                </div>
+                <h4 className="text-white font-bold text-xl mb-3">Calendly link coming soon</h4>
+                <p className="text-[var(--text-muted)] mb-6 max-w-sm">
+                  In the meantime, reach out directly and we'll set up a time to chat.
+                </p>
+                <a
+                  href="mailto:hello@orderflow.ai?subject=Book%20a%20Demo&body=Hi%20OrderFlow%20team%2C%20I'd%20like%20to%20schedule%20a%20demo."
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all duration-200"
+                  style={{
+                    background: "var(--accent)",
+                    color: "white",
+                    boxShadow: "0 8px 32px rgba(59,130,246,0.35)",
+                  }}
+                >
+                  <Calendar size={16} />
+                  Book a Call — hello@orderflow.ai
+                </a>
+              </div>
+            )}
           </div>
         </motion.div>
       </div>

@@ -12,22 +12,22 @@ const LINKS = {
     { label: "How It Works", href: "#how-it-works" },
   ],
   company: [
-    { label: "About", href: "#" },
-    { label: "Blog", href: "#" },
-    { label: "Careers", href: "#" },
-    { label: "Contact", href: "#" },
+    { label: "About", href: "#about" },
+    { label: "Blog", href: "https://orderflow.ai/blog" },
+    { label: "Careers", href: "https://orderflow.ai/careers" },
+    { label: "Contact", href: "mailto:hello@orderflow.ai" },
   ],
   legal: [
-    { label: "Privacy", href: "#" },
-    { label: "Terms", href: "#" },
-    { label: "Security", href: "#" },
+    { label: "Privacy", href: "https://orderflow.ai/privacy" },
+    { label: "Terms", href: "https://orderflow.ai/terms" },
+    { label: "Security", href: "https://orderflow.ai/security" },
   ],
 };
 
 const SOCIAL = [
-  { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Github, href: "#", label: "GitHub" },
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
+  { icon: Twitter, href: "https://x.com/orderflowai", label: "Twitter" },
+  { icon: Github, href: "https://github.com/orderflowai", label: "GitHub" },
+  { icon: Linkedin, href: "https://linkedin.com/company/orderflowai", label: "LinkedIn" },
 ];
 
 export default function Footer() {

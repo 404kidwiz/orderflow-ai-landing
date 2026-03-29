@@ -147,11 +147,12 @@ orderflow-ai/
 
 ## Deployment
 
-### Landing Page (Netlify)
-- URL: https://enchanting-sable-bd0c5c.netlify.app (existing)
-- Config: `netlify.toml` with `@netlify/plugin-nextjs`
+### Landing Page (Cloudflare Pages)
+- URL: https://orderflow-ai.pages.dev
+- Config: Wrangler CLI (`wrangler pages deploy`)
 - Build: `pnpm build`
-- Publish: `.next`
+- Publish: `.next` (static export)
+- Note: Switched from Netlify to Cloudflare Pages (2026-03-29) due to Netlify rate limits on the free tier.
 
 ### Backend (Railway) - Pending
 - Requires: Railway account, Upstash Redis, Neon PostgreSQL

@@ -1,119 +1,110 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useDrag } from "@use-gesture/react";
-import { Star, Quote } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import styles from "./Testimonials.module.css";
 
 const TESTIMONIALS = [
   {
-    quote: "Our phone order volume went up 40% the first month. The AI actually sells better than our staff — it never forgets to offer garlic knots.",
+    quote:
+      "Our phone order volume went up 40% the first month. The AI actually sells better than our staff — it never forgets to offer garlic knots.",
     author: "Marcus T.",
     business: "BBQ Shack",
     location: "Atlanta, GA",
-    stars: 5,
   },
   {
-    quote: "Setup was literally 60 seconds. I was taking AI-powered calls before my morning coffee was done. My kids thought I was joking.",
+    quote:
+      "Setup was literally 60 seconds. I was taking AI-powered calls before my morning coffee was done. My kids thought I was joking.",
     author: "Jennifer L.",
     business: "Mama's Kitchen",
     location: "Decatur, GA",
-    stars: 5,
   },
   {
-    quote: "We were losing 20% of our calls to voicemail. OrderFlow caught every single one. Revenue up, stress down. No brainer.",
+    quote:
+      "We were losing 20% of our calls to voicemail. OrderFlow caught every single one. Revenue up, stress down. No brainer.",
     author: "Roberto M.",
     business: "Taco Express",
     location: "Marietta, GA",
-    stars: 5,
   },
 ];
 
-function StarRating({ count }: { count: number }) {
-  return (
-    <div className={styles.stars}>
-      {Array.from({ length: count }).map((_, i) => (
-        <Star key={i} size={14} fill="#FF6B35" color="#FF6B35" />
-      ))}
-    </div>
-  );
-}
-
 export default function Testimonials() {
   const [active, setActive] = useState(0);
-  const [dragDir, setDragDir] = useState(0);
+
+  const prev = () => setActive((a) => (a - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
+  const next = () => setActive((a) => (a + 1) % TESTIMONIALS.length);
 
   // Auto-rotate
   useEffect(() => {
-    const timer = setInterval(() => {
-      setActive((prev) => (prev + 1) % TESTIMONIALS.length);
-    }, 5000);
-    return () => clearInterval(timer);
+    const t = setInterval(next, 6000);
+    return () => clearInterval(t);
   }, []);
 
-  const bind = useDrag(
-    ({ movement: [mx], direction: [dx], velocity: [vx] }) => {
-      if (Math.abs(mx) > 50 || vx > 0.5) {
-        if (mx > 0 || dx > 0) {
-          setActive((prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
-        } else {
-          setActive((prev) => (prev + 1) % TESTIMONIALS.length);
-        }
-      }
-    },
-    { axis: "x", filterTaps: true }
-  );
+  const t = TESTIMONIALS[active];
 
   return (
     <section className={styles.section}>
       <div className={styles.container}>
+
         <motion.div
           className={styles.header}
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className={styles.title}>What restaurant owners say</h2>
+          <p className={styles.eyebrow}>Testimonials</p>
         </motion.div>
 
-        <div className={styles.carousel} {...bind()}>
-          <div
-            className={styles.track}
-            style={{
-              transform: `translateX(calc(-${active * 100}% - ${active * 24}px))`,
-              transition: "transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)",
-            }}
-          >
-            {TESTIMONIALS.map((t, i) => (
-              <div
-                key={i}
-                className={`${styles.card} ${i === active ? styles.activeCard : ""}`}
-              >
-                <Quote className={styles.quoteIcon} size={40} color="#FF6B35" />
-                <StarRating count={t.stars} />
-                <blockquote className={styles.quote}>&ldquo;{t.quote}&rdquo;</blockquote>
-                <div className={styles.author}>
-                  <span className={styles.authorName}>{t.author}</span>
-                  <span className={styles.authorBusiness}>{t.business}</span>
-                  <span className={styles.authorLocation}>{t.location}</span>
-                </div>
+        {/* Large editorial quote */}
+        <div className={styles.quoteArea}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={active}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className={styles.quoteWrapper}
+            >
+              <span className={styles.openQuote}>&ldquo;</span>
+              <blockquote className={styles.quoteText}>
+                {t.quote}
+              </blockquote>
+
+              <div className={styles.attribution}>
+                <span className={styles.authorName}>{t.author}</span>
+                <span className={styles.separator}>·</span>
+                <span className={styles.business}>{t.business}</span>
+                <span className={styles.separator}>·</span>
+                <span className={styles.location}>{t.location}</span>
               </div>
-            ))}
-          </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
 
-        {/* Dots */}
-        <div className={styles.dots}>
-          {TESTIMONIALS.map((_, i) => (
-            <button
-              key={i}
-              className={`${styles.dot} ${i === active ? styles.activeDot : ""}`}
-              onClick={() => setActive(i)}
-              aria-label={`Go to testimonial ${i + 1}`}
-            />
-          ))}
+        {/* Navigation */}
+        <div className={styles.nav}>
+          <button onClick={prev} className={styles.navBtn} aria-label="Previous testimonial">
+            <ChevronLeft size={20} />
+          </button>
+
+          <div className={styles.dots}>
+            {TESTIMONIALS.map((_, i) => (
+              <button
+                key={i}
+                className={`${styles.dot} ${i === active ? styles.activeDot : ""}`}
+                onClick={() => setActive(i)}
+                aria-label={`Testimonial ${i + 1}`}
+              />
+            ))}
+          </div>
+
+          <button onClick={next} className={styles.navBtn} aria-label="Next testimonial">
+            <ChevronRight size={20} />
+          </button>
         </div>
+
       </div>
     </section>
   );

@@ -1,7 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --void: #0a0a0f;
+  /* ── OrderFlow Editorial Design System ── */
+  --bg: #080C12;
+  --surface: #0F1520;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.12);
+  --accent: #3B82F6;
+  --accent-glow: rgba(59, 130, 246, 0.2);
+  --accent-dim: rgba(59, 130, 246, 0.08);
+  --text-primary: #F0F4FF;
+  --text-muted: #6B7280;
+  --success: #22c55e;
+  --void: #080C12;
   --void-light: #111118;
   --orange: #FF6B35;
   --orange-glow: #FF8C5A;
@@ -10,7 +21,6 @@
   --gray-400: #9CA3AF;
   --gray-600: #4B5563;
   --glass: rgba(255, 255, 255, 0.04);
-  --border: rgba(255, 255, 255, 0.08);
   --border-hover: rgba(255, 255, 255, 0.15);
 
   /* Cursor tracking */
@@ -37,16 +47,16 @@ html.lenis {
 }
 
 body {
-  background-color: var(--void);
-  color: var(--white);
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: "General Sans", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   position: relative;
 }
 
-/* Aurora gradient blobs - positioned behind everything */
+/* Ambient glow — subtle blue depth */
 body::before {
   content: "";
   position: fixed;
@@ -54,30 +64,17 @@ body::before {
   z-index: -2;
   pointer-events: none;
   background:
-    /* Blob 1 - Orange/Pink conic */
-    radial-gradient(ellipse 80% 60% at 20% 30%, rgba(255, 107, 53, 0.08) 0%, transparent 50%),
-    /* Blob 2 - Purple/Blue conic */
-    radial-gradient(ellipse 60% 80% at 80% 70%, rgba(124, 58, 237, 0.06) 0%, transparent 50%),
-    /* Blob 3 - Orange glow */
-    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(255, 140, 90, 0.04) 0%, transparent 60%);
-  animation: aurora-drift 20s ease-in-out infinite alternate;
+    radial-gradient(ellipse 100% 80% at 15% 20%, rgba(59, 130, 246, 0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 100% at 85% 80%, rgba(124, 58, 237, 0.05) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 60% at 50% 50%, rgba(59, 130, 246, 0.03) 0%, transparent 60%);
+  animation: ambient-drift 20s ease-in-out infinite alternate;
 }
 
-@keyframes aurora-drift {
-  0% {
-    transform: translate(0, 0) scale(1);
-    opacity: 1;
-  }
-  33% {
-    transform: translate(2%, 1%) scale(1.02);
-  }
-  66% {
-    transform: translate(-1%, 2%) scale(0.98);
-  }
-  100% {
-    transform: translate(1%, -1%) scale(1.01);
-    opacity: 0.9;
-  }
+@keyframes ambient-drift {
+  0%   { transform: translate(0, 0) scale(1); opacity: 1; }
+  33%  { transform: translate(1.5%, 0.5%) scale(1.01); }
+  66%  { transform: translate(-0.5%, 1%) scale(0.99); }
+  100% { transform: translate(0.5%, -0.5%) scale(1.005); opacity: 0.9; }
 }
 
 /* Noise texture overlay */
@@ -104,8 +101,8 @@ body::after {
 }
 
 ::selection {
-  background: rgba(255, 107, 53, 0.3);
-  color: white;
+  background: rgba(59, 130, 246, 0.3);
+  color: var(--text-primary);
 }
 
 ::-webkit-scrollbar {
@@ -117,7 +114,7 @@ body::after {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--orange);
+  background: var(--accent);
   border-radius: 3px;
 }
 
@@ -129,9 +126,20 @@ body::after {
   border: 1px solid var(--border);
 }
 
+/* Glass surface (OrderFlow editorial) */
+.glass-surface {
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+/* Blue glow text shadow (for stat numbers) */
+.glow-text {
+  text-shadow: 0 0 30px rgba(59, 130, 246, 0.6), 0 0 60px rgba(59, 130, 246, 0.3);
+}
+
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-glow) 100%);
+  background: linear-gradient(135deg, var(--accent) 0%, #60A5FA 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -148,7 +156,7 @@ body::after {
 
 /* Custom focus styles */
 *:focus-visible {
-  outline: 2px solid var(--orange);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
@@ -181,17 +189,17 @@ body::after {
 .floating-field input:not(:placeholder-shown) ~ label {
   top: 0;
   font-size: 12px;
-  color: var(--orange);
-  background: var(--void-light);
+  color: var(--accent);
+  background: var(--bg);
 }
 
 /* Glow pulse animation */
 @keyframes glow-pulse {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
   }
   50% {
-    box-shadow: 0 0 40px rgba(255, 107, 53, 0.5);
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.5);
   }
 }
 

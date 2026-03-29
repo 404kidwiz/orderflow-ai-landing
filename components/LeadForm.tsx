@@ -50,6 +50,60 @@ function FloatingInput({
   );
 }
 
+function FloatingSelect({
+  id,
+  label,
+  value,
+  onChange,
+  required = false,
+  options,
+}: {
+  id: string;
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  required?: boolean;
+  options: { value: string; label: string }[];
+}) {
+  const [focused, setFocused] = useState(false);
+  const hasValue = value.length > 0;
+
+  return (
+    <div className={styles.field}>
+      <div className={`${styles.inputWrapper} ${focused ? styles.focused : ""}`}>
+        <select
+          id={id}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className={styles.select}
+          required={required}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+        >
+          <option value="" disabled hidden />
+          {options.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+        <label
+          htmlFor={id}
+          className={`${styles.floatLabel} ${focused || hasValue ? styles.floatLabelActive : ""}`}
+          style={focused || hasValue ? {} : { transform: "translateY(-50%)" }}
+        >
+          {label}
+        </label>
+        <div className={styles.selectArrow}>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function MagneticSubmit({ children, disabled }: { children: React.ReactNode; disabled?: boolean }) {
   const ref = useRef<HTMLButtonElement>(null);
   const x = useSpring(0, { stiffness: 300, damping: 20 });
@@ -86,7 +140,7 @@ function MagneticSubmit({ children, disabled }: { children: React.ReactNode; dis
 }
 
 export default function LeadForm() {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", restaurant: "" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", locations: "", restaurant: "" });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [msg, setMsg] = useState("");
 
@@ -105,7 +159,7 @@ export default function LeadForm() {
       if (res.ok) {
         setStatus("success");
         setMsg("Thanks! We'll be in touch within 24 hours.");
-        setForm({ name: "", email: "", phone: "", restaurant: "" });
+        setForm({ name: "", email: "", phone: "", locations: "", restaurant: "" });
       } else {
         setStatus("error");
         setMsg("Something went wrong. Try again or call us directly.");
@@ -179,6 +233,19 @@ export default function LeadForm() {
                   onChange={(v) => setForm({ ...form, phone: v })}
                   required
                   placeholder=" "
+                />
+                <FloatingSelect
+                  id="locations"
+                  label="Locations"
+                  value={form.locations}
+                  onChange={(v) => setForm({ ...form, locations: v })}
+                  required
+                  options={[
+                    { value: "1", label: "1 location" },
+                    { value: "2-5", label: "2-5 locations" },
+                    { value: "6-10", label: "6-10 locations" },
+                    { value: "11+", label: "11+ locations" },
+                  ]}
                 />
                 <FloatingInput
                   id="restaurant"

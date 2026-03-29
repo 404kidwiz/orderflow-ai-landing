@@ -18,6 +18,7 @@
 }
 
 .marqueeWrapper {
+  position: relative;
   display: flex;
   width: 100%;
   overflow: hidden;
@@ -30,7 +31,7 @@
   align-items: center;
   gap: 48px;
   flex-shrink: 0;
-  animation: marquee 24s linear infinite;
+  animation: marquee 30s linear infinite;
 }
 
 .marquee:hover {
@@ -42,11 +43,7 @@
   align-items: center;
   gap: 48px;
   flex-shrink: 0;
-  animation: marquee 24s linear infinite;
-  /* Offset the second copy to appear immediately after first */
-  position: absolute;
-  left: 0;
-  width: max-content;
+  animation: marquee 30s linear infinite;
 }
 
 .logoItem {
