@@ -1,38 +1,126 @@
 # OrderFlow AI — Project Summary
 
-**Last Updated:** 2026-03-29
+> **Last Updated:** 2026-03-29
+> **Status:** Active development — Stitch redesign in progress
 
 ---
 
-## Live Deployment
-- **Landing Page:** https://orderflow-ai.pages.dev
-- **Repo:** https://github.com/404kidwiz/orderflow-ai-landing
+## 🎯 What It Is
+
+**OrderFlow AI** is a white-label voice ordering SaaS for restaurants. Customers call a phone number, speak naturally to an AI agent, and place orders — no app, no website, no waiting on hold. The AI handles the full conversation, up-sells, confirms the order, and sends an SMS receipt.
+
+**Tagline:** *"Take Orders While You Sleep"*
+**Demo phone:** +1 (770) 525-5393
+**Live site:** https://orderflow-ai.pages.dev
 
 ---
 
-## Stitch Design Source
+## 🗂️ Repo Structure
+
+This repo (`orderflow-ai-landing`) is the **canonical home** for OrderFlow AI's public-facing assets.
+
+```
+orderflow-ai-landing/           ← YOU ARE HERE
+├── .stitch/                   # Stitch design package (source of truth)
+│   ├── DESIGN.md              # Obsidian Luxe design system
+│   ├── FRONTEND-REDESIGN-HANDOFF.md  # Implementation guide for all screens
+│   ├── reference-landing.html       # Stitch landing HTML export
+│   ├── reference-landing-page.html # Stitch landing-page HTML export
+│   ├── reference-dashboard.html    # Stitch dashboard HTML export
+│   └── references/            # Product, deployment, backend docs
+├── app/                       # Next.js 14 landing page
+│   ├── page.tsx               # Main landing page
+│   ├── dashboard/             # Dashboard routes
+│   └── components/            # All section components
+├── lib/                      # Utilities, animations, smooth scroll
+├── dist/                     # Static export output
+└── public/                   # Static assets
+```
+
+### Related Projects
+
+| Project | Location | Role |
+|---|---|---|
+| **Main project (private)** | `/Users/404kidwiz/Desktop/404kidwiz Vault/404-projects/orderflow-ai/` | Full-stack source (backend, dashboard, landing-v2) |
+| **Python backend** | `main-project/api/` + `main-project/src/` | FastAPI voice AI + Twilio integration |
+| **landing-v2** | `main-project/landing-v2/` | Next.js 14 implementation target for Stitch redesign |
+
+---
+
+## 💰 Revenue Model
+
+| Plan | Price | Target |
+|---|---|---|
+| Starter | $29/mo | Solo restaurants, 1 number, 100 orders/mo |
+| Pro | $79/mo | Growing spots, unlimited orders, SMS, analytics |
+| Enterprise | Custom | Chains, POS integrations, dedicated support |
+
+**14-day free trial** on all plans. Full refund if OrderFlow doesn't capture 10+ additional orders in 30 days.
+
+**Revenue goal:** $20K MRR by May 2026 | $100K MRR by December 2026
+
+---
+
+## 🏗️ Tech Stack
+
+### Frontend (this repo)
+| Layer | Tech |
+|---|---|
+| Framework | Next.js 14, React 19, TypeScript |
+| Styling | Tailwind CSS, CSS Modules |
+| Animations | Framer Motion, GSAP + ScrollTrigger, Lenis smooth scroll |
+| Icons | Lucide React |
+| Deployment | Cloudflare Pages |
+
+### Backend (separate — main project)
+| Layer | Tech |
+|---|---|
+| Framework | Python 3.12 + FastAPI |
+| Voice AI | Llama 3.3 70B via Groq + OpenRouter + Gemini fallback |
+| Session State | Upstash Redis |
+| Database | Neon PostgreSQL |
+| Phone | Twilio Voice + Messaging |
+| Billing | Stripe (checkout + webhooks + customer portal) |
+| Deployment | Railway (persistent server required for Twilio webhook conversations) |
+
+**Why Railway over Vercel/Netlify?**  
+Twilio webhook conversations require a persistent server. A single order call = 5-10+ webhook invocations sharing the same conversation memory. Vercel serverless cold-starts destroy that state. Railway gives a persistent Python process.
+
+---
+
+## 📞 Architecture — How a Call Flows
+
+```
+Customer calls +1 (770) 525-5393
+           │
+           ▼
+    Twilio Voice API
+           │
+           ▼  POST /api/voice/webhook
+    Railway (FastAPI)
+           │
+           ├──→ LLM Router (Groq → OpenRouter → Gemini → keyword fallback)
+           │         │
+           │         ▼
+           │    OrderFlow AI brain (Llama 3.3 70B)
+           │
+           ├──→ Redis (Upstash) — session state, conversation memory
+           │
+           ├──→ PostgreSQL (Neon) — orders, call logs, analytics
+           │
+           └──→ Twilio SMS — order confirmation to customer
+```
+
+---
+
+## 🎨 Design System — Obsidian Luxe
 
 **Stitch Project ID:** `13054754492898134388`
 **Design Direction:** `Obsidian Luxe`
 
-All Stitch design files are stored in `.stitch/`:
+### Color Palette
 
-```
-.stitch/
-├── DESIGN.md                    # Full design system spec
-├── reference-landing.html       # Stitch HTML export (landing)
-├── reference-landing-v2.html    # Stitch HTML export (landing v2)
-├── reference-dashboard.html     # Stitch HTML export (dashboard)
-└── references/
-    ├── BACKEND_SETUP_GUIDE.md   # Backend architecture docs
-    ├── DEPLOYMENT.md            # Deployment instructions
-    ├── PRODUCT.md               # Product specs
-    └── PRD_IMPLEMENTATION_PLAN.md  # Implementation roadmap
-```
-
-### Obsidian Luxe Design System
-
-| Token | Hex | Use |
+| Token | Hex | Role |
 |---|---|---|
 | Smoked Obsidian | `#131313` | Primary background |
 | Obsidian Low | `#1C1B1B` | Section groupings |
@@ -47,134 +135,128 @@ All Stitch design files are stored in `.stitch/`:
 | Warm Secondary Text | `#E7BDB2` | Secondary copy |
 | Ghost Outline | `#5D4038` | Subtle borders |
 
-**Typography:**
-- Headlines: `Noto Serif` (premium, editorial)
-- Body: `Manrope` (data, interface)
-
----
-
-## What It Is
-
-OrderFlow AI is an AI Employee Staffing platform — a SaaS landing page that sells AI workers ("AI Employees") to businesses at $997/month. The landing page follows a full-funnel strategy: social proof → process → features → pricing → FAQ → lead capture.
-
-**Target customer:** Home services (HVAC/Plumbing/Electricians), Real Estate Agents, Law Firms, Financial Advisors
-**Core pitch:** "Build & Delegate to AI Employees" — scalable workforce without hiring overhead
-**Revenue goal:** $20K/month by May 2026 | $100K/month by December 2026
-
----
-
-## Tech Stack
-
-| Layer | Tech |
-|---|---|
-| Frontend | Next.js 14, TypeScript, Tailwind CSS, Framer Motion |
-| Animations | Framer Motion — scroll-triggered, staggered, morphing |
-| Deployment | Cloudflare Pages |
-| Forms | Lead capture via API |
-| Design | Stitch "OrderFlow AI Design System v1.0" |
-
----
-
-## Screens / Sections
-
-| Section | Description |
-|---|---|
-| **AnimatedNavbar** | Sticky, scrolls to solid, blur backdrop, logo + links + "Get Started" CTA |
-| **Hero** | "Build & Delegate to AI Employees" headline, subtext, 3-step snippet, dual CTAs, floating AI dashboard preview |
-| **LogoMarquee** | Scrolling logos: Stripe, Linear, Notion, Vercel, Shopify, Airbnb, Uber, DoorDash |
-| **SocialProof** | "Trusted by 500+ Businesses", testimonial cards with avatar, rating, quote |
-| **HowItWorks** | 6-step horizontal scroll or numbered grid: Hire → Onboard → Delegate → AI Works → Review → Scale |
-| **Features** | 3-column grid, icon + title + description, hover lift effect |
-| **FAQ** | Accordion, 5 questions, smooth expand/collapse |
-| **CTA** | Full-width gradient banner, "Ready to Scale?" headline, email input + button |
-| **Footer** | Logo, tagline, copyright |
-
----
-
-## Design System — "OrderFlow AI v1.0"
-
-### Colors
-| Token | Hex | Use |
-|---|---|---|
-| Deep Indigo | `#0B0B1A` | Background |
-| Electric Purple | `#8B5CF6` | Primary CTA, accents |
-| Mint Green | `#10B981` | Success, highlights |
-| Pure White | `#FFFFFF` | Text, surfaces |
-| Amber Gold | `#F59E0B` | Ratings, badges |
-| Coral Red | `#EF4444` | Errors, urgency |
-| Light Gray | `#F3F4F6` | Secondary backgrounds |
-
 ### Typography
-- **Headings:** Outfit (Google Fonts) — geometric, modern
-- **Body:** DM Sans (Google Fonts) — clean, readable
+- **Headlines / Editorial:** `Noto Serif` — premium, editorial feel
+- **Body / Data / Interface:** `Manrope` — clean, modern, data-friendly
 
-### Buttons
-- Gradient: `linear-gradient(135deg, #8B5CF6, #6366F1)`
-- Rounded: `rounded-full`
-- Hover: scale up slightly, shadow deepens
-- Transitions: 300ms ease
-
-### Animations
-- **Scroll reveals:** opacity 0→1, y 20→0, 600ms ease-out, staggered 100ms
-- **Hover lifts:** y -4px, shadow increase
-- **Logo marquee:** continuous horizontal scroll, 30s linear
-- **FAQ accordion:** height auto transition, 300ms ease
-- **CTA gradient:** background-position shift on hover
+### Motion
+- Landing: cinematic reveals, scroll rhythm, AI pulse moments
+- Dashboard: restrained — state changes, hover lifts, feed refresh emphasis
+- Mobile: quick scanning, thumb comfort over flourish
 
 ---
 
-## Stitch Design Source
+## 🖥️ Stitch Screen Inventory
 
-The Stitch design spec is in `.stitch/DESIGN.md` with full color tokens, typography rules, component specs, animation timings, and layout measurements.
+### Desktop (3 screens)
+
+| Label | Stitch Title | Screen ID | Target |
+|---|---|---|---|
+| `D1B` | OrderFlow AI - Cinematic Landing Page | `5204a2639a694f3e9873cc996d3a0377` | `app/page.tsx` (preferred) |
+| `D2` | OrderFlow AI - Operations Dashboard | `b149ed5e24bd44baae1d979eb223d97a` | `app/dashboard/page.tsx` |
+| `D3` | Internal Command Center | `22b1dd05436642f98f3ceea12eb38e5a` | `app/dashboard/restaurants/page.tsx` |
+
+### Mobile (3 screens)
+
+| Label | Stitch Title | Screen ID | Target |
+|---|---|---|---|
+| `M1B` | OrderFlow AI - Mobile Cinematic Landing | `fbe3f7785ff2497e88fb42406510c40a` | Responsive `app/page.tsx` (preferred) |
+| `M2` | Mobile Operations Dashboard | `8b4d5621dd2848edb71cdf7bb6b2966c` | Responsive `app/dashboard/page.tsx` |
+| `M3` | Mobile Restaurant Admin | `1c683f2beb814173aac5a511b1dbb3e4` | Responsive `app/dashboard/restaurants/page.tsx` |
+
+### Implementation Order
+1. Tokenize design system from `.stitch/DESIGN.md`
+2. Rebuild landing in `app/page.tsx` against `D1B` + `M1B`
+3. Rework dashboard around `D2` + `M2` with stronger hierarchy
+4. Rebuild restaurant admin against `D3` + `M3`
+5. Normalize shared components (nav, cards, buttons, forms, status chips)
+
+---
+
+## 📁 Stitch Design Assets
 
 ```
-Asset locations:
-.stitch/DESIGN.md                              — Full design spec
-.stitch/references/tool-schemas.md             — Component/feature definitions
-.stitch/references/design-mappings.md          — Screen-to-component mapping
-.stitch/references/chatbot-wf-screenshots/     — Stitch UI screenshots
+.stitch/
+├── DESIGN.md                    # Full design tokens + specs (5.6KB)
+├── FRONTEND-REDESIGN-HANDOFF.md  # Screen mapping + implementation guide
+├── reference-landing.html       # Stitch HTML export — landing (66KB)
+├── reference-landing-page.html   # Stitch HTML export — landing-page (54KB)
+├── reference-dashboard.html      # Stitch HTML export — dashboard
+└── references/
+    ├── BACKEND_SETUP_GUIDE.md    # Backend architecture (Neon, Upstash, Railway)
+    ├── DEPLOYMENT.md             # Railway + Twilio deployment walkthrough
+    ├── PRODUCT.md                # Product plan, pricing, target customers
+    ├── PRD_IMPLEMENTATION_PLAN.md # Roadmap + implementation milestones
+    └── TARGET_RESTAURANTS.md      # Ideal customer profiles
 ```
 
 ---
 
-## Git History (recent)
+## 🚀 Deployment
 
-| Commit | Description |
-|---|---|
-| `b9a3e0d` | feat: redesign Hero, Features, Pricing, Testimonials, Calendly modal, TrustBar |
-| `f73a291` | chore: deps upgrade next@14.2.15 react@19 |
-| `7da3f1e` | feat: add Calendly demo booking modal + Book a Demo button |
-| `9c4f2a1` | feat: FAQ accordion with smooth open/close animations |
-| `3e7eb10` | feat: initial full-stack Next.js 14 landing + dashboard |
-
----
-
-## Deployment
-
+### Frontend (this repo)
 ```bash
 cd /Users/404kidwiz/projects/orderflow-ai-landing
 
-# Build
 pnpm build
-
-# Deploy
 npx wrangler pages deploy .next --project-name=orderflow-ai
+```
+
+### Backend (main project → Railway)
+```bash
+# Push to GitHub first
+cd "/Users/404kidwiz/Desktop/404kidwiz Vault/404-projects/orderflow-ai"
+git push origin main
+# Railway auto-deploys on push
+```
+
+### Key env vars (Railway)
+```
+ENVIRONMENT=production
+SERVER_URL=https://orderflow-ai.up.railway.app
+TWILIO_ACCOUNT_SID=ACxxxxxxxx
+TWILIO_AUTH_TOKEN=xxxxxxxx
+TWILIO_PHONE_NUMBER=+1xxxxxxxxxx
+GROQ_API_KEY=gsk_xxxxxxxx
+OPENROUTER_API_KEY=sk-or-v1-xxxxxxxx
+GEMINI_API_KEY=AIzaSyxxxxxxxx
+DATABASE_URL=postgresql://user:password@ep-xxx.neon.tech/neondb?sslmode=require
+UPSTASH_REDIS_REST_URL=https://xxx.upstash.io
+UPSTASH_REDIS_REST_TOKEN=xxxxxxxx==
 ```
 
 ---
 
-## 13 Revenue Plays (404 Technologies)
+## 📌 Current Implementation Status
 
-1. AI Employee Staffing Model ($997/mo per AI worker, $800 profit)
-2. AI Phone Agent Implementation ($997 setup + $497/mo management)
-3. Web Design Arbitrage ($1,500/site, $18K/mo potential)
-4. LinkedIn Profile Pipeline ($197-997/profile)
-5. Podcast Production Pipeline ($300-500/episode)
-6. AI Recruiter ($500-2K/placement)
-7. AI Grant Writer ($500-1,500/grant application)
-8. AI Form Filler for Law Firms ($297-997/document)
-9. AI Course Creator ($2-5K/course)
-10. Local Business Review Manager ($297-497/mo per location)
-11. Fiverr Gigs (Audio stems, Lead scrape, UI prototypes)
-12. Local SEO Autopilot ($1K/mo retainer)
-13. Micro-SaaS Flipper ($2-10K per flip)
+| Surface | Status | Notes |
+|---|---|---|
+| Landing page (current) | ✅ Live | `orderflow-ai.pages.dev` — needs Obsidian Luxe redesign |
+| Dashboard | ⚠️ Partial | Functional but stale design |
+| Backend API | ✅ Deployed | Railway — active |
+| Twilio voice | ✅ Live | +1 (770) 525-5393 answers calls |
+| Stitch redesign | 📋 In progress | D1B/M1B preferred landing direction |
+| landing-v2 | 📍 In main project | Next.js 14 implementation target |
+
+---
+
+## 🔑 Key Decisions on File Structure
+
+- **This repo** = canonical public home (landing page + Stitch designs + docs)
+- **Main project** (`Vault/404-projects/orderflow-ai/`) = private development repo with full backend + Python + landing-v2
+- **Do not treat `landing-v2`** as the canonical output location — it's a nested Next.js inside the main project
+- **When Stitch redesign is implemented**, update `app/page.tsx` and `app/dashboard/` in THIS repo
+
+---
+
+## 📞 Support / Debug
+
+- **Twilio console:** https://console.twilio.com
+- **Railway dashboard:** https://railway.app
+- **Neon console:** https://neon.tech
+- **Upstash console:** https://upstash.com
+- **Live demo call:** +1 (770) 525-5393
+
+---
+
+*This document is the single source of truth for OrderFlow AI's current state. Update it whenever the architecture, tech stack, or deployment changes.*

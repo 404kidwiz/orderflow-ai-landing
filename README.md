@@ -1,93 +1,106 @@
-# OrderFlow AI — AI Employee Staffing Platform
+# OrderFlow AI
 
-**Live:** https://orderflow-ai.pages.dev
+> *"Take Orders While You Sleep"* — AI voice ordering for restaurants.
 
-Build and delegate to AI Employees — scalable workforce for your business at $997/month.
-
----
-
-## Screens
-
-| Route | Screen |
-|---|---|
-| `/` | Landing page — Hero, How It Works, Features, Testimonials, Pricing, FAQ, CTA |
-| `/dashboard` | Lead dashboard (authenticated) |
+**Live:** https://orderflow-ai.pages.dev  
+**Demo call:** +1 (770) 525-5393
 
 ---
 
-## Tech Stack
+## What It Is
 
-| Layer | Tech |
-|---|---|
-| Frontend | Next.js 14, TypeScript, Tailwind CSS, Framer Motion |
-| Design | Stitch "Obsidian Luxe" Design System |
-| Deployment | Cloudflare Pages |
+OrderFlow AI is a white-label voice ordering SaaS. Customers call a phone number, speak naturally to an AI agent, and place orders — no app, no website, no hold music. The AI up-sells, confirms, and sends an SMS receipt.
+
+**Pricing:** $29–$79/month + 14-day free trial
+
+---
+
+## Repo Structure
+
+```
+orderflow-ai-landing/        ← CANONICAL HOME (you are here)
+├── .stitch/                  # Stitch design package
+│   ├── DESIGN.md             # Obsidian Luxe design system
+│   ├── FRONTEND-REDESIGN-HANDOFF.md  # Screen mapping + impl guide
+│   ├── reference-*.html      # Stitch HTML exports (design source)
+│   └── references/           # Product, backend, deployment docs
+├── app/                     # Next.js 14 landing page + dashboard
+├── components/              # Section components (Hero, HowItWorks, etc.)
+└── lib/                     # Animations, smooth scroll, utilities
+```
+
+**Related (private, Desktop Vault):**  
+`/Users/404kidwiz/Desktop/404kidwiz Vault/404-projects/orderflow-ai/` — full-stack backend + Python API + landing-v2
 
 ---
 
 ## Stitch Design System
 
-**Stitch Project ID:** `13054754492898134388`
+**Stitch Project ID:** `13054754492898134388`  
 **Design Direction:** `Obsidian Luxe`
 
-All design files are in `.stitch/`:
+Full design tokens, screen inventory, and implementation guide in [`.stitch/DESIGN.md`](.stitch/DESIGN.md) and [`.stitch/FRONTEND-REDESIGN-HANDOFF.md`](.stitch/FRONTEND-REDESIGN-HANDOFF.md).
 
-```
-.stitch/
-├── DESIGN.md                    # Full design tokens + specs
-├── reference-landing.html       # Landing page (Stitch export)
-├── reference-landing-v2.html    # Landing v2 (Stitch export)
-├── reference-dashboard.html    # Dashboard (Stitch export)
-└── references/                  # Implementation docs
-```
+### Colors
 
-### Colors (Obsidian Luxe)
-
-| Token | Hex | Role |
+| Token | Hex | Use |
 |---|---|---|
 | Smoked Obsidian | `#131313` | Primary background |
-| Obsidian Mid | `#201F1F` | Card surfaces |
 | Ember Orange | `#FF4500` | Primary CTA |
 | Signal Violet | `#8A2BE2` | AI/Intelligence |
 | Warm White | `#E5E2E1` | Main text |
 
 ### Typography
 
-- **Headlines:** Noto Serif (premium, editorial)
-- **Body:** Manrope (data, interface)
+- **Headlines:** Noto Serif
+- **Body:** Manrope
 
 ---
 
-## Getting Started
+## Quick Start
 
 ```bash
 # Install
 pnpm install
 
-# Build
-pnpm build
-
 # Dev
 pnpm dev
 
-# Deploy
+# Build
+pnpm build
+
+# Deploy (Cloudflare Pages)
 npx wrangler pages deploy .next --project-name=orderflow-ai
 ```
 
 ---
 
-## Features
+## 6 Screens to Implement (from Stitch)
 
-- 🎯 Full-funnel landing page
-- 📋 Lead capture with CTA
-- 💬 FAQ accordion with smooth animations
-- ⭐ Social proof + testimonials
-- 📱 Fully responsive
-- ✨ Scroll-triggered animations
-- 🎨 Gradient CTAs with hover effects
+| Screen | Route | Status |
+|---|---|---|
+| Cinematic Landing (desktop) | `/` | ⚠️ Needs redesign |
+| Cinematic Landing (mobile) | `/` | ⚠️ Needs redesign |
+| Operations Dashboard | `/dashboard` | ⚠️ Needs redesign |
+| Internal Command Center | `/dashboard/restaurants` | ⚠️ Needs redesign |
+| Mobile Ops Dashboard | `/dashboard` (responsive) | ⚠️ Needs redesign |
+| Mobile Restaurant Admin | `/dashboard/restaurants` (responsive) | ⚠️ Needs redesign |
+
+See [`.stitch/FRONTEND-REDESIGN-HANDOFF.md`](.stitch/FRONTEND-REDESIGN-HANDOFF.md) for full screen IDs, previews, and build order.
 
 ---
 
-## Repo
+## Backend
+
+- **Live API:** https://orderflow-ai.up.railway.app (Railway + FastAPI)
+- **Voice:** Twilio — +1 (770) 525-5393
+- **Database:** Neon PostgreSQL
+- **Session:** Upstash Redis
+
+Full backend setup in [`.stitch/references/DEPLOYMENT.md`](.stitch/references/DEPLOYMENT.md).
+
+---
+
+## GitHub
 
 https://github.com/404kidwiz/orderflow-ai-landing
