@@ -4,7 +4,6 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import * as Accordion from "@radix-ui/react-accordion";
 import { ChevronDown } from "lucide-react";
-import styles from "./FAQ.module.css";
 
 const FAQS = [
   {
@@ -45,21 +44,21 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section className={styles.section}>
-      <div className={styles.container}>
+    <section className="py-20 md:py-32 px-6">
+      <div className="max-w-[720px] mx-auto">
         <motion.div
-          className={styles.header}
+          className="text-center mb-12"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className={styles.title}>
+          <h2 className="font-serif text-[clamp(32px,5vw,56px)] font-black tracking-tight text-[var(--silk)] leading-[1.1] mb-4">
             Frequently asked
             <br />
-            <span className="gradient-text">questions</span>
+            <span className="text-[var(--smoke)]">questions</span>
           </h2>
-          <p className={styles.subtitle}>
+          <p className="text-lg text-[var(--ash)]">
             Everything you need to know about OrderFlow.
           </p>
         </motion.div>
@@ -68,15 +67,16 @@ export default function FAQ() {
           type="single"
           value={openIndex?.toString() ?? ""}
           onValueChange={(v) => setOpenIndex(v ? parseInt(v) : null)}
-          className={styles.list}
+          className="flex flex-col gap-3"
         >
           {FAQS.map((faq, i) => (
-            <Accordion.Item key={i} value={i.toString()} className={styles.item}>
+            <Accordion.Item key={i} value={i.toString()} className="relative bg-[var(--glass)] border border-[var(--border)] rounded-2xl overflow-hidden transition-colors duration-200 hover:border-[var(--ember)]/20 group">
+              <div className={`absolute left-0 top-0 bottom-0 w-[3px] bg-[var(--ember)] transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] origin-bottom rounded-l-[3px] ${openIndex === i ? 'scale-y-100' : 'scale-y-0'}`} />
               <Accordion.Header>
-                <Accordion.Trigger className={styles.trigger}>
-                  <span className={styles.question}>{faq.q}</span>
+                <Accordion.Trigger className="w-full flex justify-between items-center py-5 px-6 bg-transparent border-none cursor-pointer text-left focus:outline-none">
+                  <span className="text-[17px] font-semibold text-[var(--silk)] leading-[1.4]">{faq.q}</span>
                   <motion.div
-                    className={styles.chevron}
+                    className={`shrink-0 transition-colors duration-200 ${openIndex === i ? 'text-[var(--ember)]' : 'text-[var(--ash)]'}`}
                     animate={{ rotate: openIndex === i ? 180 : 0 }}
                     transition={{ duration: 0.3 }}
                   >
@@ -84,14 +84,14 @@ export default function FAQ() {
                   </motion.div>
                 </Accordion.Trigger>
               </Accordion.Header>
-              <Accordion.Content className={styles.content}>
+              <Accordion.Content className="overflow-hidden">
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <p className={styles.answer}>{faq.a}</p>
+                  <p className="px-6 pb-5 text-[15px] text-[var(--ash)] leading-[1.7]">{faq.a}</p>
                 </motion.div>
               </Accordion.Content>
             </Accordion.Item>

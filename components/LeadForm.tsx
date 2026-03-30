@@ -3,7 +3,6 @@
 import { useState, useRef } from "react";
 import { motion, useSpring } from "framer-motion";
 import { Send, Loader2, CheckCircle } from "lucide-react";
-import styles from "./LeadForm.module.css";
 
 function FloatingInput({
   id,
@@ -12,7 +11,7 @@ function FloatingInput({
   value,
   onChange,
   required = false,
-  placeholder = "",
+  placeholder = " ",
 }: {
   id: string;
   label: string;
@@ -26,14 +25,14 @@ function FloatingInput({
   const hasValue = value.length > 0;
 
   return (
-    <div className={styles.field}>
-      <div className={`${styles.inputWrapper} ${focused ? styles.focused : ""}`}>
+    <div className="flex flex-col gap-2">
+      <div className={`relative ${focused ? "focused-field" : ""}`}>
         <input
           id={id}
           type={type}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className={styles.input}
+          className={`w-full pt-[22px] pb-[10px] px-[18px] bg-white/5 border rounded-xl text-[15px] text-[var(--silk)] outline-none transition-all duration-200 ${focused ? "border-[var(--ember)] bg-white/5 shadow-[0_0_0_3px_rgba(255,69,0,0.15),0_0_20px_rgba(255,69,0,0.1)]" : "border-[var(--border)]"}`}
           placeholder={placeholder}
           required={required}
           onFocus={() => setFocused(true)}
@@ -41,7 +40,11 @@ function FloatingInput({
         />
         <label
           htmlFor={id}
-          className={`${styles.floatLabel} ${focused || hasValue ? styles.floatLabelActive : ""}`}
+          className={`absolute left-[18px] transition-all duration-200 pointer-events-none px-1 bg-transparent ${
+            focused || hasValue 
+              ? "top-2 -translate-y-0 text-[11px] font-semibold text-[var(--ember)] bg-[var(--obsidian)] uppercase tracking-[0.05em]" 
+              : "top-1/2 -translate-y-1/2 text-[15px] text-[var(--ash)]"
+          }`}
         >
           {label}
         </label>
@@ -127,7 +130,7 @@ function MagneticSubmit({ children, disabled }: { children: React.ReactNode; dis
     <motion.button
       ref={ref}
       type="submit"
-      className={styles.submit}
+      className="flex items-center justify-center gap-2.5 px-6 py-4 bg-[linear-gradient(135deg,var(--ember)_0%,var(--ember-glow)_100%)] border-none rounded-[14px] text-base font-bold text-white cursor-pointer transition-all duration-200 shadow-[0_8px_30px_rgba(255,69,0,0.3)] will-change-transform disabled:opacity-70 disabled:cursor-not-allowed hover:not-disabled:-translate-y-0.5 hover:not-disabled:shadow-[0_12px_40px_rgba(255,69,0,0.4)]"
       style={{ x, y }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
@@ -151,10 +154,18 @@ export default function LeadForm() {
     setStatus("loading");
 
     try {
-      const res = await fetch("https://api-production-90b5.up.railway.app/api/lead", {
+      const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://api-production-90b5.up.railway.app";
+      const res = await fetch(`${API_BASE}/api/leads`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          name: form.name,
+          phone: form.phone,
+          email: form.email,
+          restaurant: form.restaurant,
+          type: "catering",
+          description: `Lead from landing page — ${form.restaurant || "No restaurant name"}`,
+        }),
       });
       if (res.ok) {
         setStatus("success");
@@ -171,39 +182,39 @@ export default function LeadForm() {
   };
 
   return (
-    <section id="lead-form" className={styles.section}>
-      <div className={styles.container}>
+    <section id="lead-form" className="py-20 md:py-32 px-6" style={{ background: "linear-gradient(180deg, transparent, color-mix(in srgb, var(--ember) 3%, transparent), transparent)" }}>
+      <div className="max-w-[1080px] mx-auto">
         <motion.div
-          className={styles.wrapper}
+          className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 p-8 md:p-12 bg-[var(--glass)] backdrop-blur-xl border border-[var(--border)] rounded-[32px]"
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <div className={styles.content}>
-            <h2 className={styles.title}>Ready to start?</h2>
-            <p className={styles.desc}>
+          <div className="flex flex-col gap-6">
+            <h2 className="font-serif text-[clamp(28px,4vw,40px)] font-black tracking-tight text-[var(--silk)] leading-[1.1]">Ready to start?</h2>
+            <p className="text-[17px] text-[var(--ash)] leading-[1.6]">
               Join 500+ restaurants already using OrderFlow. Get your free setup in under 30 minutes.
             </p>
-            <ul className={styles.benefits}>
+            <ul className="list-none flex flex-col gap-3">
               {["14-day free trial", "No credit card required", "Cancel anytime"].map((b, i) => (
-                <li key={i} className={styles.benefit}>
-                  <CheckCircle size={16} color="#22c55e" />
+                <li key={i} className="flex items-center gap-2.5 text-[15px] text-[var(--ash)]">
+                  <CheckCircle size={16} className="text-[#22c55e]" />
                   {b}
                 </li>
               ))}
             </ul>
           </div>
 
-          <form className={styles.form} onSubmit={handleSubmit}>
+          <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
             {status === "success" ? (
               <motion.div
-                className={styles.success}
+                className="flex flex-col items-center justify-center gap-4 py-12 px-6 text-center text-base text-[var(--silk)]"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
-                <CheckCircle size={48} color="#22c55e" />
+                <CheckCircle size={48} className="text-[#22c55e]" />
                 <p>{msg}</p>
               </motion.div>
             ) : (
@@ -214,7 +225,6 @@ export default function LeadForm() {
                   value={form.name}
                   onChange={(v) => setForm({ ...form, name: v })}
                   required
-                  placeholder=" "
                 />
                 <FloatingInput
                   id="email"
@@ -223,7 +233,6 @@ export default function LeadForm() {
                   value={form.email}
                   onChange={(v) => setForm({ ...form, email: v })}
                   required
-                  placeholder=" "
                 />
                 <FloatingInput
                   id="phone"
@@ -232,7 +241,6 @@ export default function LeadForm() {
                   value={form.phone}
                   onChange={(v) => setForm({ ...form, phone: v })}
                   required
-                  placeholder=" "
                 />
                 <FloatingSelect
                   id="locations"
@@ -252,13 +260,12 @@ export default function LeadForm() {
                   label="Restaurant Name (Optional)"
                   value={form.restaurant}
                   onChange={(v) => setForm({ ...form, restaurant: v })}
-                  placeholder=" "
                 />
 
                 <MagneticSubmit disabled={status === "loading"}>
                   {status === "loading" ? (
                     <>
-                      <Loader2 size={18} className={styles.spin} />
+                      <Loader2 size={18} className="animate-spin" />
                       Sending...
                     </>
                   ) : (
@@ -269,7 +276,7 @@ export default function LeadForm() {
                   )}
                 </MagneticSubmit>
 
-                {status === "error" && <p className={styles.error}>{msg}</p>}
+                {status === "error" && <p className="text-[#ef4444] text-[14px]">{msg}</p>}
               </>
             )}
           </form>

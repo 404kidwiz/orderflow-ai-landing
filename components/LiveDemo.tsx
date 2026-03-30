@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Phone, Send, CheckCircle } from "lucide-react";
-import styles from "./LiveDemo.module.css";
 
 const DEMO_MESSAGES = [
   { role: "ai", text: "Thanks for calling Sal's Pizza! What can I get started for you today?" },
@@ -15,11 +14,11 @@ const DEMO_MESSAGES = [
 
 function WaveformBars({ active }: { active: boolean }) {
   return (
-    <div className={styles.waveform}>
+    <div className="flex items-center gap-[2px] h-4">
       {Array.from({ length: 12 }).map((_, i) => (
         <motion.div
           key={i}
-          className={styles.bar}
+          className="w-[3px] h-full bg-[var(--ember)] rounded-[2px] min-h-[2px]"
           animate={active ? {
             scaleY: [0.2, 1, 0.4, 0.8, 0.3, 1, 0.5],
           } : { scaleY: 0.2 }}
@@ -33,37 +32,6 @@ function WaveformBars({ active }: { active: boolean }) {
         />
       ))}
     </div>
-  );
-}
-
-function TypingText({ text, speed = 30 }: { text: string; speed?: number }) {
-  const [displayed, setDisplayed] = useState("");
-
-  useEffect(() => {
-    setDisplayed("");
-    let i = 0;
-    const interval = setInterval(() => {
-      if (i < text.length) {
-        setDisplayed(text.slice(0, i + 1));
-        i++;
-      } else {
-        clearInterval(interval);
-      }
-    }, speed);
-    return () => clearInterval(interval);
-  }, [text, speed]);
-
-  return (
-    <span>
-      {displayed}
-      <motion.span
-        className={styles.cursor}
-        animate={{ opacity: [1, 0] }}
-        transition={{ repeat: Infinity, duration: 0.6 }}
-      >
-        |
-      </motion.span>
-    </span>
   );
 }
 
@@ -113,59 +81,59 @@ export default function LiveDemo() {
   };
 
   return (
-    <section id="demo" className={styles.section}>
-      <div className={styles.container}>
+    <section id="demo" className="py-20 md:py-32 px-6" style={{ background: "linear-gradient(180deg, transparent, color-mix(in srgb, var(--ember) 2%, transparent), transparent)" }}>
+      <div className="max-w-[1280px] mx-auto">
         {/* Header */}
         <motion.div
-          className={styles.header}
+          className="text-center mb-16"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <div className={styles.badge}>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[var(--ember)]/25 bg-[var(--ember)]/10 text-[var(--ember)] text-[13px] font-semibold mb-5">
             <Phone size={14} />
             Live Demo: +1 (770) 525-5393
           </div>
-          <h2 className={styles.title}>See OrderFlow In Action</h2>
-          <p className={styles.subtitle}>
+          <h2 className="font-serif text-[clamp(32px,5vw,52px)] font-black tracking-tight text-[var(--silk)] mb-4">See OrderFlow In Action</h2>
+          <p className="text-lg text-[var(--ash)] max-w-[500px] mx-auto leading-[1.6]">
             Watch how our AI takes a real phone order — naturally, accurately, and fast.
           </p>
         </motion.div>
 
         {/* Demo Area */}
         <motion.div
-          className={styles.demoArea}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center"
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2, duration: 0.7 }}
         >
           {/* Phone Mockup */}
-          <div className={styles.phone}>
-            <div className={styles.phoneNotch} />
-            <div className={styles.phoneScreen}>
-              <div className={styles.phoneHeader}>
-                <span className={styles.phoneHeaderTitle}>Sal's Pizza</span>
-                <span className={styles.phoneHeaderStatus}>
-                  <span className={styles.statusDot} />
+          <div className="relative w-full max-w-[340px] lg:max-w-[340px] md:max-w-[300px] mx-auto bg-[#1a1a24] rounded-[44px] p-4 shadow-[0_40px_80px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.1)]">
+            <div className="w-[100px] h-[28px] bg-[var(--obsidian-deep)] rounded-[20px] mx-auto mb-3" />
+            <div className="bg-[#111118] rounded-[32px] p-4 min-h-[420px] flex flex-col">
+              <div className="flex justify-between items-center pb-3 border-b border-[var(--border)] mb-3">
+                <span className="text-[15px] font-bold text-[var(--silk)]">Sal's Pizza</span>
+                <span className="flex items-center gap-1.5 text-[11px] font-semibold text-[#22c55e]">
+                  <span className="w-1.5 h-1.5 bg-[#22c55e] rounded-full animate-pulse" />
                   AI Active
                 </span>
               </div>
 
-              <div className={styles.messages}>
+              <div className="flex-1 overflow-y-auto flex flex-col gap-2 pr-1">
                 <AnimatePresence>
                   {visibleMessages.map((msg, i) => (
                     <motion.div
                       key={`${msg.role}-${i}`}
-                      className={`${styles.message} ${msg.role === "ai" ? styles.aiMsg : styles.customerMsg}`}
+                      className={`flex ${msg.role === "ai" ? "justify-start" : "justify-end"}`}
                       initial={{ opacity: 0, y: 20, scale: 0.95 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <div className={styles.bubble}>
+                      <div className={`max-w-[85%] p-2.5 px-3.5 rounded-2xl text-[13px] leading-[1.5] ${msg.role === "ai" ? "bg-[var(--ember)]/10 border border-[var(--ember)]/20 text-[var(--silk)] rounded-bl-sm" : "bg-[var(--violet)]/20 border border-[var(--violet)]/30 text-[var(--silk)] rounded-br-sm"}`}>
                         {msg.role === "ai" && (
-                          <div className={styles.waveformWrapper}>
+                          <div className="flex items-center gap-0.5 h-5 mb-1.5">
                             <WaveformBars active={i === visibleMessages.length - 1 && msg.role === "ai" && !orderConfirmed} />
                           </div>
                         )}
@@ -176,13 +144,13 @@ export default function LiveDemo() {
                 </AnimatePresence>
                 {aiTyping && (
                   <motion.div
-                    className={`${styles.message} ${styles.aiMsg}`}
+                    className="flex justify-start"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                   >
-                    <div className={styles.bubble}>
+                    <div className="max-w-[85%] p-2.5 px-3.5 rounded-2xl text-[13px] leading-[1.5] bg-[var(--ember)]/10 border border-[var(--ember)]/20 text-[var(--silk)] rounded-bl-sm flex items-center">
                       <WaveformBars active />
-                      <span className={styles.typing}>Thinking...</span>
+                      <span className="text-[12px] text-[var(--ash)] ml-2">Thinking...</span>
                     </div>
                   </motion.div>
                 )}
@@ -190,26 +158,26 @@ export default function LiveDemo() {
 
               {orderConfirmed && (
                 <motion.div
-                  className={styles.orderConfirmed}
+                  className="flex items-center gap-2 p-2.5 px-3.5 bg-green-500/10 border border-green-500/30 rounded-xl text-[13px] font-semibold text-[#22c55e] my-2"
                   initial={{ opacity: 0, y: 20, scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 >
-                  <CheckCircle size={16} color="#22c55e" />
+                  <CheckCircle size={16} />
                   <span>Order Confirmed — $28.47</span>
                 </motion.div>
               )}
 
-              <form className={styles.inputArea} onSubmit={handleUserSubmit}>
+              <form className="flex gap-2 mt-auto pt-3 border-t border-[var(--border)]" onSubmit={handleUserSubmit}>
                 <input
                   ref={inputRef}
                   type="text"
                   value={userInput}
                   onChange={(e) => setUserInput(e.target.value)}
                   placeholder="Try it — type an order..."
-                  className={styles.input}
+                  className="flex-1 bg-white/5 border border-[var(--border)] rounded-xl py-2.5 px-3.5 text-[13px] text-[var(--silk)] outline-none focus:border-[var(--ember)] transition-colors placeholder-[var(--ash)]"
                 />
-                <button type="submit" className={styles.sendBtn}>
+                <button type="submit" className="bg-[var(--ember)] border-none rounded-xl p-2.5 text-white cursor-pointer hover:scale-105 transition-transform flex items-center justify-center">
                   <Send size={16} />
                 </button>
               </form>
@@ -217,9 +185,9 @@ export default function LiveDemo() {
           </div>
 
           {/* Right: Info */}
-          <div className={styles.info}>
-            <h3 className={styles.infoTitle}>Talk to OrderFlow like you'd talk to your best employee</h3>
-            <ul className={styles.features}>
+          <div className="flex flex-col gap-8">
+            <h3 className="font-serif text-[clamp(24px,3vw,36px)] font-black tracking-tight text-[var(--silk)] leading-[1.2]">Talk to OrderFlow like you'd talk to your best employee</h3>
+            <ul className="flex flex-col gap-4 list-none">
               {[
                 "Natural conversation — no scripts, no button presses",
                 "Handles complex mods: 'large pepperoni, extra cheese, no onions'",
@@ -229,15 +197,15 @@ export default function LiveDemo() {
               ].map((f, i) => (
                 <motion.li
                   key={i}
-                  className={styles.featureItem}
+                  className="flex items-start gap-3 text-base text-[var(--ash)] leading-[1.5]"
                   initial={{ opacity: 0, x: 20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1, duration: 0.5 }}
                 >
-                  <div className={styles.checkIcon}>
+                  <div className="shrink-0 w-[22px] h-[22px] rounded-full bg-[var(--ember)]/10 border border-[var(--ember)]/25 flex items-center justify-center mt-0.5">
                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                      <path d="M2 7L5.5 10.5L12 3.5" stroke="#FF6B35" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M2 7L5.5 10.5L12 3.5" stroke="var(--ember)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </div>
                   {f}

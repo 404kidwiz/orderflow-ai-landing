@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Noto_Serif, Manrope } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const notoSerif = Noto_Serif({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-inter",
+  variable: "--font-serif",
+});
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-sans",
 });
 
 export const metadata: Metadata = {
@@ -27,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${notoSerif.variable} ${manrope.variable}`}>
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link
@@ -35,7 +41,7 @@ export default function RootLayout({
           href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap"
         />
       </head>
-      <body>
+      <body className="font-sans">
         <div className="noise-overlay" aria-hidden="true" />
         {children}
       </body>
