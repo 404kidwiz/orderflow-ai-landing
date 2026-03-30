@@ -72,13 +72,13 @@ function FloatingSelect({
   const hasValue = value.length > 0;
 
   return (
-    <div className={styles.field}>
-      <div className={`${styles.inputWrapper} ${focused ? styles.focused : ""}`}>
+    <div className="flex flex-col gap-2">
+      <div className={`relative ${focused ? "focused-field" : ""}`}>
         <select
           id={id}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className={styles.select}
+          className={`w-full pt-[22px] pb-[10px] px-[18px] bg-white/5 border rounded-xl text-[15px] text-[var(--silk)] outline-none transition-all duration-200 appearance-none ${focused ? "border-[var(--ember)] bg-white/5 shadow-[0_0_0_3px_rgba(255,69,0,0.15),0_0_20px_rgba(255,69,0,0.1)]" : "border-[var(--border)]"}`}
           required={required}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
@@ -92,12 +92,15 @@ function FloatingSelect({
         </select>
         <label
           htmlFor={id}
-          className={`${styles.floatLabel} ${focused || hasValue ? styles.floatLabelActive : ""}`}
-          style={focused || hasValue ? {} : { transform: "translateY(-50%)" }}
+          className={`absolute left-[18px] transition-all duration-200 pointer-events-none px-1 bg-transparent ${
+            focused || hasValue
+              ? "top-2 -translate-y-0 text-[11px] font-semibold text-[var(--ember)] bg-[var(--obsidian)] uppercase tracking-[0.05em]"
+              : "top-1/2 -translate-y-1/2 text-[15px] text-[var(--ash)]"
+          }`}
         >
           {label}
         </label>
-        <div className={styles.selectArrow}>
+        <div className="absolute right-[14px] top-1/2 -translate-y-1/2 pointer-events-none text-[var(--ash)]">
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
             <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
