@@ -7,7 +7,7 @@ import { Check, X, Sparkles } from "lucide-react";
 const PLANS = [
   {
     name: "Starter",
-    price: 97,
+    price: 299,
     period: "/mo",
     desc: "Perfect for single-location restaurants",
     features: [
@@ -25,7 +25,7 @@ const PLANS = [
   },
   {
     name: "Growth",
-    price: 197,
+    price: 599,
     period: "/mo",
     desc: "For growing restaurant groups",
     features: [
@@ -43,8 +43,8 @@ const PLANS = [
   },
   {
     name: "Enterprise",
-    price: 497,
-    period: "/mo",
+    price: "Contact",
+    period: "",
     desc: "For restaurant groups & franchises",
     features: [
       { text: "Everything in Growth", included: true },
@@ -94,14 +94,14 @@ function MagneticButton({ children, className, onClick }: { children: React.Reac
   );
 }
 
-function AnimatedPrice({ value, annual }: { value: number; annual: boolean }) {
-  const displayValue = annual ? Math.round(value * 0.8) : value;
+function AnimatedPrice({ value, annual }: { value: number | string; annual: boolean }) {
+  const displayValue = typeof value === "number" ? (annual ? Math.round(value * 0.8) : value) : value;
 
   return (
     <AnimatePresence mode="wait">
       <motion.span
         key={`${displayValue}-${annual}`}
-        className="text-[56px] font-black text-[var(--silk)] tracking-tight leading-none font-mono"
+        className={typeof value === 'number' ? "text-[56px] font-black text-[var(--silk)] tracking-tight leading-none font-mono" : "text-[42px] font-black text-[var(--silk)] tracking-tight leading-none font-serif"}
         initial={{ rotateX: -90, opacity: 0 }}
         animate={{ rotateX: 0, opacity: 1 }}
         exit={{ rotateX: 90, opacity: 0 }}
@@ -216,9 +216,9 @@ export default function Pricing() {
               </div>
 
               <div className="flex items-baseline gap-1 mb-8">
-                <span className="text-2xl font-semibold text-[var(--ash)]">$</span>
+                {typeof plan.price === 'number' && <span className="text-2xl font-semibold text-[var(--ash)]">$</span>}
                 <AnimatedPrice value={plan.price} annual={annual} />
-                <span className="text-base text-[var(--ash)]">{plan.period}</span>
+                {plan.period && <span className="text-base text-[var(--ash)]">{plan.period}</span>}
               </div>
 
               <ul className="flex flex-col gap-3.5 mb-8 flex-1">
