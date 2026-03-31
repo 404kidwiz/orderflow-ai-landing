@@ -6,8 +6,8 @@ import { gsap, ScrollTrigger } from "@/lib/scroll-animations";
 import NavBar from "@/components/NavBar/NavBar";
 import Hero from "@/components/Hero";
 import TrustBar from "@/components/TrustBar/TrustBar";
-import LiveDemo from "@/components/LiveDemo";
 import HowItWorks from "@/components/HowItWorks";
+import LiveDemo from "@/components/LiveDemo";
 import Features from "@/components/Features";
 import Stats from "@/components/Stats";
 import Testimonials from "@/components/Testimonials";
@@ -46,8 +46,8 @@ export default function Home() {
         <NavBar />
         <Hero />
         <TrustBar />
-        <LiveDemo />
         <HowItWorks />
+        <LiveDemo />
         <Features />
         <Stats />
         <Testimonials />

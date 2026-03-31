@@ -10,7 +10,7 @@
 }
 
 .nav.scrolled {
-  background: rgba(10, 10, 15, 0.8);
+  background: rgba(10, 10, 15, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom-color: var(--border);
@@ -31,7 +31,7 @@
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  color: var(--white);
+  color: var(--text-primary);
   font-weight: 700;
   font-size: 20px;
   letter-spacing: -0.02em;
@@ -45,7 +45,7 @@
 
 .link {
   padding: 8px 16px;
-  color: var(--gray-400);
+  color: var(--text-secondary);
   text-decoration: none;
   font-size: 15px;
   font-weight: 500;
@@ -54,7 +54,7 @@
 }
 
 .link:hover {
-  color: var(--white);
+  color: var(--text-primary);
   background: rgba(255, 255, 255, 0.05);
 }
 
@@ -69,7 +69,7 @@
   align-items: center;
   gap: 6px;
   padding: 8px 14px;
-  color: var(--gray-400);
+  color: var(--text-secondary);
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
@@ -78,30 +78,30 @@
 }
 
 .phoneLink:hover {
-  color: var(--white);
+  color: var(--text-primary);
 }
 
 .cta {
   padding: 10px 20px;
-  background: linear-gradient(135deg, var(--orange) 0%, #FF8C5A 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--ember) 0%, var(--ember-soft) 100%);
+  color: var(--obsidian-low);
   text-decoration: none;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   border-radius: 10px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
+  box-shadow: 0 4px 20px rgba(255, 69, 0, 0.3);
 }
 
 .cta:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(255, 107, 53, 0.4);
+  box-shadow: 0 8px 30px rgba(255, 69, 0, 0.4);
 }
 
 .secondaryCta {
   padding: 10px 20px;
   background: transparent;
-  color: var(--white);
+  color: var(--text-primary);
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
@@ -112,16 +112,16 @@
 }
 
 .secondaryCta:hover {
-  border-color: var(--orange);
-  color: var(--orange);
-  background: rgba(255, 107, 53, 0.05);
+  border-color: var(--ember);
+  color: var(--ember);
+  background: var(--surface-ember);
 }
 
 .mobileToggle {
   display: none;
   background: none;
   border: none;
-  color: var(--white);
+  color: var(--text-primary);
   cursor: pointer;
   padding: 8px;
 }
@@ -143,7 +143,7 @@
 
 .mobileLink {
   padding: 16px;
-  color: var(--white);
+  color: var(--text-primary);
   text-decoration: none;
   font-size: 18px;
   font-weight: 500;
@@ -158,11 +158,11 @@
 .mobileCta {
   margin-top: 12px;
   padding: 16px;
-  background: linear-gradient(135deg, var(--orange) 0%, #FF8C5A 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--ember) 0%, var(--ember-soft) 100%);
+  color: var(--obsidian-low);
   text-decoration: none;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
   border-radius: 12px;
   text-align: center;
 }

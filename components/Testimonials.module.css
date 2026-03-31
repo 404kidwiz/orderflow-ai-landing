@@ -1,6 +1,6 @@
 .section {
   padding: 96px 24px;
-  background: var(--bg);
+  background: var(--obsidian-low);
   border-top: 1px solid var(--border);
 }
 
@@ -19,7 +19,7 @@
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 .quoteArea {
@@ -39,10 +39,10 @@
   font-size: 120px;
   line-height: 0.6;
   font-weight: 900;
-  color: var(--accent);
+  color: var(--ember);
   opacity: 0.2;
   margin-bottom: 16px;
-  font-family: Georgia, serif;
+  font-family: 'Noto Serif', Georgia, serif;
 }
 
 .quoteText {
@@ -53,6 +53,8 @@
   color: var(--text-primary);
   font-style: normal;
   margin-bottom: 32px;
+  font-family: 'Noto Serif', Georgia, serif;
+  font-style: italic;
 }
 
 .attribution {
@@ -70,19 +72,19 @@
 }
 
 .separator {
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-size: 13px;
 }
 
 .business {
   font-size: 14px;
   font-weight: 600;
-  color: var(--accent);
+  color: var(--ember);
 }
 
 .location {
   font-size: 13px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 .nav {
@@ -102,15 +104,15 @@
   justify-content: center;
   border: 1px solid var(--border);
   background: transparent;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   cursor: pointer;
   transition: border-color 0.2s, color 0.2s, background 0.2s;
 }
 
 .navBtn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: var(--accent-dim);
+  border-color: var(--ember);
+  color: var(--ember);
+  background: var(--surface-ember);
 }
 
 .dots {
@@ -129,6 +131,6 @@
 }
 
 .activeDot {
-  background: var(--accent);
+  background: var(--ember);
   transform: scale(1.3);
 }

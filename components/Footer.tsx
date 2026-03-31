@@ -38,11 +38,11 @@ export default function Footer() {
           {/* Brand */}
           <div className={styles.brand}>
             <a href="#" className={styles.logo}>
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                <rect x="2" y="10" width="4" height="8" rx="2" fill="#FF6B35" />
-                <rect x="8" y="6" width="4" height="16" rx="2" fill="#FF6B35" />
-                <rect x="14" y="8" width="4" height="12" rx="2" fill="#FF6B35" />
-                <rect x="20" y="4" width="4" height="20" rx="2" fill="#FF6B35" />
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none" style={{ color: "var(--ember)" }}>
+                <rect x="2" y="10" width="4" height="8" rx="2" fill="currentColor" />
+                <rect x="8" y="6" width="4" height="16" rx="2" fill="currentColor" />
+                <rect x="14" y="8" width="4" height="12" rx="2" fill="currentColor" />
+                <rect x="20" y="4" width="4" height="20" rx="2" fill="currentColor" />
               </svg>
               <span>OrderFlow</span>
             </a>

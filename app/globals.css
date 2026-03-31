@@ -1,27 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap');
 @import "tailwindcss";
 
 :root {
-  /* ── OrderFlow Editorial Design System ── */
-  --bg: #080C12;
-  --surface: #0F1520;
+  /* ── Obsidian Luxe Design System ── */
+  /* Backgrounds */
+  --void: #0a0a0a;                    /* Deepest black */
+  --obsidian-low: #131313;             /* Primary background */
+  --obsidian-mid: #1C1B1B;             /* Section groupings */
+  --obsidian-high: #201F1F;            /* Card surfaces */
+  --obsidian-highest: #2A2A2A;        /* Hover/active states */
+  --obsidian-floating: #353534;        /* Floating panels */
+
+  /* Brand Colors */
+  --ember: #FF4500;                    /* Primary CTA, urgent action */
+  --ember-soft: #FFB5A0;              /* Secondary accents */
+  --ember-glow: rgba(255, 69, 0, 0.15);
+  --signal: #8A2BE2;                  /* AI/Intelligence moments */
+  --signal-soft: #DCB8FF;             /* AI highlights */
+
+  /* Text */
+  --text-primary: #E5E2E1;            /* Main text on dark */
+  --text-secondary: #E7BDB2;          /* Secondary/muted text */
+  --ghost-outline: #5D4038;           /* Subtle borders */
+
+  /* Semantic */
+  --success: #22c55e;
+  --error: #ef4444;
+  --warning: #f59e0b;
+
+  /* Surfaces */
+  --surface-glass: rgba(255, 255, 255, 0.03);
+  --surface-ember: rgba(255, 69, 0, 0.08);
+  --surface-signal: rgba(138, 43, 226, 0.08);
+
+  /* Legacy aliases (for compatibility) */
+  --bg: var(--obsidian-low);
+  --surface: var(--obsidian-high);
   --border: rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.12);
-  --accent: #3B82F6;
-  --accent-glow: rgba(59, 130, 246, 0.2);
-  --accent-dim: rgba(59, 130, 246, 0.08);
-  --text-primary: #F0F4FF;
-  --text-muted: #6B7280;
-  --success: #22c55e;
-  --void: #080C12;
-  --void-light: #111118;
-  --orange: #FF6B35;
-  --orange-glow: #FF8C5A;
-  --purple: #7C3AED;
-  --white: #FFFFFF;
+  --accent: var(--ember);
+  --accent-glow: rgba(255, 69, 0, 0.2);
+  --accent-dim: rgba(255, 69, 0, 0.08);
+  --text-muted: var(--text-secondary);
+  --orange: var(--ember);
+  --orange-glow: var(--ember-soft);
+  --purple: var(--signal);
+  --white: var(--text-primary);
   --gray-400: #9CA3AF;
   --gray-600: #4B5563;
-  --glass: rgba(255, 255, 255, 0.04);
+  --glass: var(--surface-glass);
   --border-hover: rgba(255, 255, 255, 0.15);
+  --void-light: #111118;
 
   /* Cursor tracking */
   --cursor-x: 50%;
@@ -47,16 +76,21 @@ html.lenis {
 }
 
 body {
-  background-color: var(--bg);
+  background-color: var(--void);
   color: var(--text-primary);
-  font-family: "General Sans", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Manrope', system-ui, sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   position: relative;
 }
 
-/* Ambient glow — subtle blue depth */
+/* Headings use Noto Serif */
+h1, h2, h3, .font-serif {
+  font-family: 'Noto Serif', Georgia, serif;
+}
+
+/* Ambient glow — ember depth */
 body::before {
   content: "";
   position: fixed;
@@ -64,9 +98,9 @@ body::before {
   z-index: -2;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 100% 80% at 15% 20%, rgba(59, 130, 246, 0.07) 0%, transparent 55%),
-    radial-gradient(ellipse 80% 100% at 85% 80%, rgba(124, 58, 237, 0.05) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 60% at 50% 50%, rgba(59, 130, 246, 0.03) 0%, transparent 60%);
+    radial-gradient(ellipse 100% 80% at 15% 20%, rgba(255, 69, 0, 0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 100% at 85% 80%, rgba(138, 43, 226, 0.05) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 60% at 50% 50%, rgba(255, 69, 0, 0.03) 0%, transparent 60%);
   animation: ambient-drift 20s ease-in-out infinite alternate;
 }
 
@@ -101,7 +135,7 @@ body::after {
 }
 
 ::selection {
-  background: rgba(59, 130, 246, 0.3);
+  background: rgba(255, 69, 0, 0.3);
   color: var(--text-primary);
 }
 
@@ -114,7 +148,7 @@ body::after {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--accent);
+  background: var(--ember);
   border-radius: 3px;
 }
 
@@ -126,20 +160,20 @@ body::after {
   border: 1px solid var(--border);
 }
 
-/* Glass surface (OrderFlow editorial) */
+/* Glass surface (Obsidian Luxe) */
 .glass-surface {
-  background: var(--surface);
+  background: var(--obsidian-high);
   border: 1px solid var(--border);
 }
 
-/* Blue glow text shadow (for stat numbers) */
+/* Ember glow text shadow (for stat numbers) */
 .glow-text {
-  text-shadow: 0 0 30px rgba(59, 130, 246, 0.6), 0 0 60px rgba(59, 130, 246, 0.3);
+  text-shadow: 0 0 30px rgba(255, 69, 0, 0.6), 0 0 60px rgba(255, 69, 0, 0.3);
 }
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, var(--accent) 0%, #60A5FA 100%);
+  background: linear-gradient(135deg, var(--ember) 0%, var(--ember-soft) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -147,16 +181,16 @@ body::after {
 
 /* Glow effects */
 .glow-orange {
-  box-shadow: 0 0 30px rgba(255, 107, 53, 0.3);
+  box-shadow: 0 0 30px rgba(255, 69, 0, 0.3);
 }
 
 .glow-purple {
-  box-shadow: 0 0 30px rgba(124, 58, 237, 0.3);
+  box-shadow: 0 0 30px rgba(138, 43, 226, 0.3);
 }
 
 /* Custom focus styles */
 *:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--ember);
   outline-offset: 2px;
 }
 
@@ -189,17 +223,17 @@ body::after {
 .floating-field input:not(:placeholder-shown) ~ label {
   top: 0;
   font-size: 12px;
-  color: var(--accent);
-  background: var(--bg);
+  color: var(--ember);
+  background: var(--obsidian-low);
 }
 
 /* Glow pulse animation */
 @keyframes glow-pulse {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 0 20px rgba(255, 69, 0, 0.3);
   }
   50% {
-    box-shadow: 0 0 40px rgba(59, 130, 246, 0.5);
+    box-shadow: 0 0 40px rgba(255, 69, 0, 0.5);
   }
 }
 
@@ -230,7 +264,7 @@ body::after {
   inset: -2px;
   border-radius: inherit;
   padding: 2px;
-  background: linear-gradient(90deg, var(--orange), var(--purple), var(--orange), var(--purple));
+  background: linear-gradient(90deg, var(--ember), var(--signal), var(--ember), var(--signal));
   background-size: 300% 300%;
   animation: orbit 3s linear infinite;
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -258,10 +292,10 @@ body::after {
   border-radius: inherit;
   background: linear-gradient(
     135deg,
-    rgba(255, 0, 0, 0.1) 0%,
+    rgba(255, 69, 0, 0.1) 0%,
     transparent 40%,
     transparent 60%,
-    rgba(0, 0, 255, 0.1) 100%
+    rgba(138, 43, 226, 0.1) 100%
   );
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -279,7 +313,7 @@ body::after {
   left: 0;
   width: 0%;
   height: 2px;
-  background: linear-gradient(90deg, var(--orange), var(--orange-glow));
+  background: linear-gradient(90deg, var(--ember), var(--ember-soft));
   z-index: 9999;
   will-change: width;
 }

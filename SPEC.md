@@ -63,7 +63,7 @@ Dark cinematic tech — think Apple Vision Pro launch page meets high-end fintec
 6. **Features** — 8-card asymmetric bento grid, scroll-triggered
 7. **Stats** — Animated counters with SVG ring progress
 8. **Testimonials** — 3D carousel with drag
-9. **Pricing** — 3 cards, monthly/annual toggle
+9. **Pricing** — 3 cards (Starter $49/mo, Pro $129/mo, Enterprise $299/mo), monthly/annual toggle, 14-day free trial
 10. **FAQ** — Accordion, 8 detailed questions
 11. **Lead Form** — Glass card, success state
 12. **Footer** — 4-column links, social, location

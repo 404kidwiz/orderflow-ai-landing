@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OrderFlow AI — MRR Revenue Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg-primary: #0a0a0b;
+    --bg-card: #141416;
+    --bg-card-hover: #1a1a1e;
+    --border: #2a2a2e;
+    --text-primary: #f0f0f0;
+    --text-secondary: #888;
+    --text-muted: #555;
+    --accent-orange: #FF4500;
+    --accent-violet: #8A2BE2;
+    --accent-green: #00D68F;
+    --accent-red: #FF4757;
+    --accent-blue: #4A9EFF;
+    --accent-yellow: #FFD93D;
+    --radius: 12px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .header {
+    padding: 24px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(180deg, rgba(138,43,226,0.06) 0%, transparent 100%);
+  }
+
+  .header-left h1 {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .header-left p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+
+  .header-right {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .badge {
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-live {
+    background: rgba(0,214,143,0.15);
+    color: var(--accent-green);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  .btn-refresh {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-refresh:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--accent-violet);
+  }
+
+  /* Main Grid */
+  .dashboard {
+    padding: 24px 32px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* KPI Cards */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .kpi-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .kpi-card:hover {
+    border-color: var(--accent-violet);
+    background: var(--bg-card-hover);
+    transform: translateY(-1px);
+  }
+
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+  }
+
+  .kpi-card:nth-child(1)::before { background: var(--accent-green); }
+  .kpi-card:nth-child(2)::before { background: var(--accent-violet); }
+  .kpi-card:nth-child(3)::before { background: var(--accent-orange); }
+  .kpi-card:nth-child(4)::before { background: var(--accent-blue); }
+  .kpi-card:nth-child(5)::before { background: var(--accent-yellow); }
+  .kpi-card:nth-child(6)::before { background: var(--accent-red); }
+
+  .kpi-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .kpi-value {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+
+  .kpi-change {
+    font-size: 12px;
+    margin-top: 8px;
+    font-weight: 600;
+  }
+
+  .kpi-change.positive { color: var(--accent-green); }
+  .kpi-change.negative { color: var(--accent-red); }
+  .kpi-change.neutral { color: var(--text-muted); }
+
+  /* Charts Section */
+  .charts-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .chart-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+
+  .chart-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .chart-title span {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  /* Plan Breakdown Table */
+  .table-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+
+  .table-card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th {
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-secondary);
+    font-weight: 600;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 12px;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(42,42,46,0.5);
+  }
+
+  tr:hover td {
+    background: rgba(138,43,226,0.04);
+  }
+
+  .plan-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .plan-starter { background: rgba(74,158,255,0.15); color: var(--accent-blue); }
+  .plan-pro { background: rgba(138,43,226,0.15); color: var(--accent-violet); }
+  .plan-enterprise { background: rgba(255,69,0,0.15); color: var(--accent-orange); }
+
+  .bar-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .bar-fill {
+    height: 6px;
+    border-radius: 3px;
+    transition: width 0.6s ease;
+  }
+
+  /* Recent Activity */
+  .activity-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+
+  .activity-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(42,42,46,0.3);
+  }
+
+  .activity-item:last-child { border-bottom: none; }
+
+  .activity-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+
+  .activity-icon.new { background: rgba(0,214,143,0.15); }
+  .activity-icon.churn { background: rgba(255,71,87,0.15); }
+  .activity-icon.upgrade { background: rgba(138,43,226,0.15); }
+  .activity-icon.trial { background: rgba(74,158,255,0.15); }
+
+  .activity-text { flex: 1; font-size: 13px; }
+  .activity-time { font-size: 11px; color: var(--text-muted); }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 12px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    margin-top: 24px;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .header, .dashboard { padding: 16px; }
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .charts-grid { grid-template-columns: 1fr; }
+    .kpi-value { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>📊 MRR Revenue Dashboard</h1>
+    <p>OrderFlow AI — Company Scoreboard</p>
+  </div>
+  <div class="header-right">
+    <span class="badge badge-live">● Live</span>
+    <button class="btn-refresh" onclick="refreshData()">↻ Refresh</button>
+  </div>
+</div>
+
+<div class="dashboard">
+  <!-- KPI Cards -->
+  <div class="kpi-grid" id="kpiGrid">
+    <div class="kpi-card">
+      <div class="kpi-label">Total Active Customers</div>
+      <div class="kpi-value" id="kpiCustomers">0</div>
+      <div class="kpi-change positive" id="kpiCustomersChange">—</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Monthly Recurring Revenue</div>
+      <div class="kpi-value" id="kpiMRR">$0</div>
+      <div class="kpi-change positive" id="kpiMRRChange">—</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Monthly Churn Rate</div>
+      <div class="kpi-value" id="kpiChurn">0%</div>
+      <div class="kpi-change neutral" id="kpiChurnChange">—</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">New Customers (This Week)</div>
+      <div class="kpi-value" id="kpiNewCust">0</div>
+      <div class="kpi-change neutral" id="kpiNewCustChange">—</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Expansion Revenue</div>
+      <div class="kpi-value" id="kpiExpansion">$0</div>
+      <div class="kpi-change neutral" id="kpiExpansionChange">—</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Trial → Paid Conversion</div>
+      <div class="kpi-value" id="kpiConversion">0%</div>
+      <div class="kpi-change neutral" id="kpiConversionChange">—</div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-title">
+        MRR Over Time (12 Months)
+        <span>Updated weekly</span>
+      </div>
+      <canvas id="mrrChart" height="260"></canvas>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">
+        Plan Distribution
+        <span>By customer count</span>
+      </div>
+      <canvas id="planChart" height="260"></canvas>
+    </div>
+  </div>
+
+  <!-- Plan Breakdown -->
+  <div class="table-card">
+    <h3>MRR by Plan Tier</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Plan</th>
+          <th>Customers</th>
+          <th>MRR</th>
+          <th>% of Total</th>
+          <th>Revenue Share</th>
+        </tr>
+      </thead>
+      <tbody id="planTableBody">
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Recent Activity -->
+  <div class="activity-card">
+    <div class="chart-title">
+      Recent Activity
+      <span>Last 7 days</span>
+    </div>
+    <div id="activityFeed"></div>
+  </div>
+</div>
+
+<div class="footer">
+  OrderFlow AI Revenue Dashboard · Data source: Google Sheets · Auto-refreshes weekly · Run ID: <span id="runId">—</span>
+</div>
+
+<script>
+// ============================================================
+// DATA ENGINE
+// ============================================================
+// This dashboard reads from embedded sample data.
+// To connect to live Google Sheets, replace DATA with a fetch()
+// to your Google Sheets API endpoint.
+// ============================================================
+
+const RUN_ID = new URLSearchParams(location.search).get('run') || 'local';
+
+// Sample data structure — replace with live Google Sheets fetch
+const DATA = {
+  current: {
+    totalCustomers: 47,
+    mrr: 4643,
+    churnRate: 4.2,
+    newCustomersWeek: 5,
+    expansionRevenue: 394,
+    trialToPaidRate: 28.5
+  },
+  previous: {
+    totalCustomers: 39,
+    mrr: 3849,
+    churnRate: 5.1,
+    newCustomersWeek: 3,
+    expansionRevenue: 197,
+    trialToPaidRate: 22.0
+  },
+  plans: [
+    { name: 'Starter', price: 49, customers: 28, color: '#4A9EFF' },
+    { name: 'Pro', price: 129, customers: 14, color: '#8A2BE2' },
+    { name: 'Enterprise', price: 299, customers: 5, color: '#FF4500' }
+  ],
+  mrrHistory: [
+    { month: 'Apr 25', mrr: 0 },
+    { month: 'May 25', mrr: 196 },
+    { month: 'Jun 25', mrr: 539 },
+    { month: 'Jul 25', mrr: 882 },
+    { month: 'Aug 25', mrr: 1274 },
+    { month: 'Sep 25', mrr: 1862 },
+    { month: 'Oct 25', mrr: 2450 },
+    { month: 'Nov 25', mrr: 2989 },
+    { month: 'Dec 25', mrr: 3332 },
+    { month: 'Jan 26', mrr: 3576 },
+    { month: 'Feb 26', mrr: 3849 },
+    { month: 'Mar 26', mrr: 4643 }
+  ],
+  activities: [
+    { type: 'new', text: 'Smokehouse BBQ signed up for Pro plan', time: '2 hours ago' },
+    { type: 'trial', text: 'Taco Loco started 14-day free trial', time: '5 hours ago' },
+    { type: 'upgrade', text: 'Mama Rosa upgraded Starter → Pro', time: '1 day ago' },
+    { type: 'new', text: 'Burger Barn signed up for Starter plan', time: '2 days ago' },
+    { type: 'churn', text: 'Quick Bites Diner cancelled (Starter)', time: '3 days ago' },
+    { type: 'new', text: 'Pho King Good signed up for Pro plan', time: '3 days ago' },
+    { type: 'trial', text: 'Pizza Paradiso started 14-day trial', time: '4 days ago' },
+    { type: 'new', text: 'Southern Kitchen signed up for Enterprise', time: '5 days ago' },
+    { type: 'upgrade', text: 'Waffle House #447 upgraded Pro → Enterprise', time: '6 days ago' },
+    { type: 'new', text: 'Dragon Palace signed up for Starter plan', time: '7 days ago' }
+  ]
+};
+
+// ============================================================
+// RENDER ENGINE
+// ============================================================
+
+function formatCurrency(n) {
+  return '$' + n.toLocaleString('en-US');
+}
+
+function formatPercent(n) {
+  return n.toFixed(1) + '%';
+}
+
+function calcChange(curr, prev) {
+  if (prev === 0) return { value: '+100%', positive: true };
+  const diff = ((curr - prev) / prev * 100).toFixed(1);
+  return {
+    value: (diff > 0 ? '+' : '') + diff + '%',
+    positive: diff > 0
+  };
+}
+
+function renderKPIs() {
+  const d = DATA.current, p = DATA.previous;
+
+  document.getElementById('kpiCustomers').textContent = d.totalCustomers;
+  const custCh = calcChange(d.totalCustomers, p.totalCustomers);
+  renderChange('kpiCustomersChange', custCh, 'vs last month');
+
+  document.getElementById('kpiMRR').textContent = formatCurrency(d.mrr);
+  const mrrCh = calcChange(d.mrr, p.mrr);
+  renderChange('kpiMRRChange', mrrCh, 'vs last month');
+
+  document.getElementById('kpiChurn').textContent = formatPercent(d.churnRate);
+  const churnEl = document.getElementById('kpiChurnChange');
+  churnEl.textContent = (d.churnRate < p.churnRate ? '↓' : '↑') + ' from ' + formatPercent(p.churnRate);
+  churnEl.className = 'kpi-change ' + (d.churnRate < p.churnRate ? 'positive' : 'negative');
+
+  document.getElementById('kpiNewCust').textContent = d.newCustomersWeek;
+  const ncCh = calcChange(d.newCustomersWeek, p.newCustomersWeek);
+  renderChange('kpiNewCustChange', ncCh, 'vs last week');
+
+  document.getElementById('kpiExpansion').textContent = formatCurrency(d.expansionRevenue);
+  const expCh = calcChange(d.expansionRevenue, p.expansionRevenue);
+  renderChange('kpiExpansionChange', expCh, 'vs last month');
+
+  document.getElementById('kpiConversion').textContent = formatPercent(d.trialToPaidRate);
+  const convEl = document.getElementById('kpiConversionChange');
+  convEl.textContent = (d.trialToPaidRate > p.trialToPaidRate ? '↑' : '↓') + ' from ' + formatPercent(p.trialToPaidRate);
+  convEl.className = 'kpi-change ' + (d.trialToPaidRate > p.trialToPaidRate ? 'positive' : 'negative');
+}
+
+function renderChange(elId, change, suffix) {
+  const el = document.getElementById(elId);
+  el.textContent = (change.positive ? '↑' : '↓') + ' ' + change.value + ' ' + suffix;
+  el.className = 'kpi-change ' + (change.positive ? 'positive' : 'negative');
+}
+
+function renderMRRChart() {
+  const ctx = document.getElementById('mrrChart').getContext('2d');
+  const gradient = ctx.createLinearGradient(0, 0, 0, 260);
+  gradient.addColorStop(0, 'rgba(138, 43, 226, 0.3)');
+  gradient.addColorStop(1, 'rgba(138, 43, 226, 0)');
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: DATA.mrrHistory.map(d => d.month),
+      datasets: [{
+        label: 'MRR ($)',
+        data: DATA.mrrHistory.map(d => d.mrr),
+        borderColor: '#8A2BE2',
+        backgroundColor: gradient,
+        borderWidth: 2,
+        fill: true,
+        tension: 0.4,
+        pointRadius: 3,
+        pointBackgroundColor: '#8A2BE2',
+        pointBorderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#1a1a1e',
+          borderColor: '#2a2a2e',
+          borderWidth: 1,
+          titleColor: '#f0f0f0',
+          bodyColor: '#888',
+          callbacks: {
+            label: ctx => '$' + ctx.parsed.y.toLocaleString()
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(42,42,46,0.3)' },
+          ticks: { color: '#555', font: { size: 11 } }
+        },
+        y: {
+          grid: { color: 'rgba(42,42,46,0.3)' },
+          ticks: {
+            color: '#555',
+            font: { size: 11 },
+            callback: v => '$' + v.toLocaleString()
+          }
+        }
+      }
+    }
+  });
+}
+
+function renderPlanChart() {
+  const ctx = document.getElementById('planChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: DATA.plans.map(p => p.name),
+      datasets: [{
+        data: DATA.plans.map(p => p.customers),
+        backgroundColor: DATA.plans.map(p => p.color),
+        borderColor: '#141416',
+        borderWidth: 3,
+        hoverOffset: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '65%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            color: '#888',
+            padding: 16,
+            font: { size: 12 },
+            usePointStyle: true,
+            pointStyleWidth: 8
+          }
+        },
+        tooltip: {
+          backgroundColor: '#1a1a1e',
+          borderColor: '#2a2a2e',
+          borderWidth: 1,
+          titleColor: '#f0f0f0',
+          bodyColor: '#888'
+        }
+      }
+    }
+  });
+}
+
+function renderPlanTable() {
+  const totalMRR = DATA.plans.reduce((sum, p) => sum + p.price * p.customers, 0);
+  const tbody = document.getElementById('planTableBody');
+
+  tbody.innerHTML = DATA.plans.map(plan => {
+    const mrr = plan.price * plan.customers;
+    const pct = ((mrr / totalMRR) * 100).toFixed(1);
+    const planClass = plan.name.toLowerCase();
+    return `
+      <tr>
+        <td><span class="plan-badge plan-${planClass}">${plan.name}</span></td>
+        <td>${plan.customers}</td>
+        <td>${formatCurrency(mrr)}</td>
+        <td>${pct}%</td>
+        <td>
+          <div class="bar-cell">
+            <div class="bar-fill" style="width:${pct}%;background:${plan.color}"></div>
+            <span style="font-size:12px;color:var(--text-secondary)">${formatCurrency(mrr)}</span>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function renderActivity() {
+  const feed = document.getElementById('activityFeed');
+  const icons = { new: '👤', churn: '❌', upgrade: '⬆️', trial: '🔄' };
+  const classes = { new: 'new', churn: 'churn', upgrade: 'upgrade', trial: 'trial' };
+
+  feed.innerHTML = DATA.activities.map(a => `
+    <div class="activity-item">
+      <div class="activity-icon ${classes[a.type]}">${icons[a.type]}</div>
+      <div class="activity-text">${a.text}</div>
+      <div class="activity-time">${a.time}</div>
+    </div>
+  `).join('');
+}
+
+function refreshData() {
+  // In production, this fetches from Google Sheets API
+  const btn = document.querySelector('.btn-refresh');
+  btn.textContent = 'Refreshing...';
+  setTimeout(() => {
+    btn.textContent = '↻ Refresh';
+    alert('In production, this fetches live data from Google Sheets.\n\nTo connect: Replace the DATA object with a fetch() to your Google Sheets API endpoint.');
+  }, 1000);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.getElementById('runId').textContent = RUN_ID;
+renderKPIs();
+renderMRRChart();
+renderPlanChart();
+renderPlanTable();
+renderActivity();
+</script>
+</body>
+</html>

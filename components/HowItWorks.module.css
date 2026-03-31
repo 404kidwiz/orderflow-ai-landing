@@ -1,6 +1,6 @@
 .section {
   padding: 56px 24px;
-  background: var(--bg);
+  background: var(--obsidian-low);
 }
 
 .container {
@@ -18,7 +18,7 @@
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--ember);
   margin-bottom: 16px;
 }
 
@@ -28,6 +28,7 @@
   line-height: 1.1;
   letter-spacing: -0.02em;
   color: var(--text-primary);
+  font-family: 'Noto Serif', Georgia, serif;
 }
 
 .timeline {
@@ -60,6 +61,7 @@
   user-select: none;
   pointer-events: none;
   z-index: 0;
+  font-family: 'Noto Serif', Georgia, serif;
 }
 
 /* Connector line between steps */
@@ -80,9 +82,9 @@
   align-items: flex-start;
   padding: 28px 32px;
   border-radius: 16px;
-  background: var(--surface);
+  background: var(--obsidian-high);
   border: 1px solid var(--border);
-  border-left: 3px solid var(--accent);
+  border-left: 3px solid var(--ember);
 }
 
 .iconRow {
@@ -109,7 +111,7 @@
 .stepDesc {
   font-size: 16px;
   line-height: 1.7;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   max-width: 520px;
 }
 

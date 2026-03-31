@@ -1,6 +1,6 @@
 .section {
   padding: 120px 24px;
-  background: var(--bg);
+  background: var(--obsidian-low);
 }
 
 .container {
@@ -17,14 +17,15 @@
   font-size: clamp(32px, 5vw, 56px);
   font-weight: 900;
   letter-spacing: -0.03em;
-  color: var(--white);
+  color: var(--text-primary);
   line-height: 1.1;
   margin-bottom: 16px;
+  font-family: 'Noto Serif', Georgia, serif;
 }
 
 .subtitle {
   font-size: 18px;
-  color: var(--gray-400);
+  color: var(--text-secondary);
   margin-bottom: 32px;
 }
 
@@ -34,7 +35,7 @@
   align-items: center;
   gap: 12px;
   font-size: 15px;
-  color: var(--gray-400);
+  color: var(--text-secondary);
 }
 
 .toggleBtn {
@@ -51,13 +52,13 @@
 .toggleKnob {
   width: 22px;
   height: 22px;
-  background: var(--accent);
+  background: var(--ember);
   border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 2px 8px rgba(255, 69, 0, 0.4);
 }
 
 .activeLabel {
-  color: var(--white);
+  color: var(--text-primary);
   font-weight: 600;
 }
 
@@ -65,7 +66,7 @@
   font-size: 12px;
   padding: 3px 8px;
   background: rgba(34, 197, 94, 0.15);
-  color: #22c55e;
+  color: var(--success);
   border-radius: 100px;
   margin-left: 6px;
   font-weight: 600;
@@ -82,7 +83,7 @@
 .card {
   position: relative;
   padding: 40px 32px;
-  background: var(--surface);
+  background: var(--obsidian-high);
   border: 1px solid var(--border);
   border-radius: 24px;
   display: flex;
@@ -91,10 +92,10 @@
 }
 
 .card.popular {
-  border-color: rgba(59, 130, 246, 0.5);
+  border-color: rgba(255, 69, 0, 0.5);
   transform: scale(1.02);
-  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.4), 0 0 40px rgba(59, 130, 246, 0.15), 0 24px 64px rgba(0, 0, 0, 0.4);
-  background: var(--surface);
+  box-shadow: 0 0 0 1px rgba(255, 69, 0, 0.4), 0 0 40px rgba(255, 69, 0, 0.15), 0 24px 64px rgba(0, 0, 0, 0.4);
+  background: var(--obsidian-high);
 }
 
 @keyframes gradient-shift {
@@ -111,8 +112,8 @@
   align-items: center;
   gap: 6px;
   padding: 6px 16px;
-  background: var(--accent);
-  color: white;
+  background: var(--ember);
+  color: var(--obsidian-low);
   font-size: 12px;
   font-weight: 700;
   border-radius: 100px;
@@ -127,13 +128,13 @@
 .planName {
   font-size: 24px;
   font-weight: 800;
-  color: var(--white);
+  color: var(--text-primary);
   margin-bottom: 8px;
 }
 
 .planDesc {
   font-size: 14px;
-  color: var(--gray-400);
+  color: var(--text-secondary);
 }
 
 .priceWrapper {
@@ -146,20 +147,20 @@
 .currency {
   font-size: 24px;
   font-weight: 600;
-  color: var(--gray-400);
+  color: var(--text-secondary);
 }
 
 .price {
   font-size: 56px;
   font-weight: 900;
-  color: var(--white);
+  color: var(--text-primary);
   letter-spacing: -0.03em;
   line-height: 1;
 }
 
 .period {
   font-size: 16px;
-  color: var(--gray-400);
+  color: var(--text-secondary);
 }
 
 .features {
@@ -179,21 +180,21 @@
 }
 
 .checkIcon {
-  color: #22c55e;
+  color: var(--success);
   flex-shrink: 0;
 }
 
 .xIcon {
-  color: var(--gray-600);
+  color: var(--text-secondary);
   flex-shrink: 0;
 }
 
 .featureText {
-  color: var(--white);
+  color: var(--text-primary);
 }
 
 .featureTextOff {
-  color: var(--gray-600);
+  color: var(--text-secondary);
 }
 
 .cta {
@@ -205,31 +206,31 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.25s ease;
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--white);
+  background: var(--surface-glass);
+  color: var(--text-primary);
   border: 1px solid var(--border);
   will-change: transform;
 }
 
 .cta:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .ctaPopular {
-  background: var(--accent);
-  color: white;
+  background: var(--ember);
+  color: var(--obsidian-low);
   border: none;
-  box-shadow: 0 8px 30px rgba(59, 130, 246, 0.35);
+  box-shadow: 0 8px 30px rgba(255, 69, 0, 0.35);
 }
 
 .ctaPopular:hover {
-  box-shadow: 0 12px 40px rgba(59, 130, 246, 0.5);
+  box-shadow: 0 12px 40px rgba(255, 69, 0, 0.5);
 }
 
 .note {
   text-align: center;
   font-size: 14px;
-  color: var(--gray-600);
+  color: var(--text-secondary);
 }
 
 @media (max-width: 1024px) {

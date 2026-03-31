@@ -17,7 +17,7 @@ export default function TrustBar() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          Trusted by independent restaurants across the US
+          Be among the first restaurants to never miss a phone order
         </motion.p>
 
         <motion.div
@@ -28,22 +28,13 @@ export default function TrustBar() {
           transition={{ delay: 0.15, duration: 0.6 }}
         >
           <span
-            className="text-7xl sm:text-8xl font-black tracking-tighter"
+            className="text-5xl sm:text-6xl font-black tracking-tighter"
             style={{
-              color: "var(--accent)",
-              textShadow: "0 0 60px rgba(59,130,246,0.4)",
-              fontVariantNumeric: "tabular-nums",
+              color: "var(--ember)",
+              textShadow: "0 0 60px rgba(255,69,0,0.4)",
             }}
           >
-            500+
-          </span>
-          <span
-            className="text-2xl font-semibold"
-            style={{ color: "var(--text-muted)" }}
-          >
-            restaurants
-            <br />
-            <span className="text-base font-normal">taking orders 24/7</span>
+            Launching in Atlanta
           </span>
         </motion.div>
       </div>

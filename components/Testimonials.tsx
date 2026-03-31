@@ -7,24 +7,17 @@ import styles from "./Testimonials.module.css";
 const TESTIMONIALS = [
   {
     quote:
-      "Our phone order volume went up 40% the first month. The AI actually sells better than our staff — it never forgets to offer garlic knots.",
-    author: "Marcus T.",
-    business: "BBQ Shack",
+      "We're building OrderFlow to solve a real problem: restaurants losing orders to busy signals and voicemail. If you're a restaurant owner, we'd love to work with you.",
+    author: "Andrew M.",
+    business: "404 Technologies",
     location: "Atlanta, GA",
   },
   {
     quote:
-      "Setup was literally 60 seconds. I was taking AI-powered calls before my morning coffee was done. My kids thought I was joking.",
-    author: "Jennifer L.",
-    business: "Mama's Kitchen",
-    location: "Decatur, GA",
-  },
-  {
-    quote:
-      "We were losing 20% of our calls to voicemail. OrderFlow caught every single one. Revenue up, stress down. No brainer.",
-    author: "Roberto M.",
-    business: "Taco Express",
-    location: "Marietta, GA",
+      "Our AI voice agent handles every call, never takes a break, and never forgets to upsell. We're looking for early restaurant partners to shape the product.",
+    author: "The OrderFlow Team",
+    business: "Early Access Program",
+    location: "Now Accepting Signups",
   },
 ];
 
@@ -53,7 +46,7 @@ export default function Testimonials() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <p className={styles.eyebrow}>Testimonials</p>
+          <p className={styles.eyebrow}>Our Mission</p>
         </motion.div>
 
         {/* Large editorial quote */}

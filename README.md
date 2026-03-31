@@ -11,7 +11,7 @@
 
 OrderFlow AI is a white-label voice ordering SaaS. Customers call a phone number, speak naturally to an AI agent, and place orders — no app, no website, no hold music. The AI up-sells, confirms, and sends an SMS receipt.
 
-**Pricing:** $29–$79/month + 14-day free trial
+**Pricing:** Starter $49/mo · Pro $129/mo · Enterprise $299/mo — all with 14-day free trial
 
 ---
 

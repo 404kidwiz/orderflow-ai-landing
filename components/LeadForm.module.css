@@ -163,7 +163,7 @@
   justify-content: center;
   gap: 10px;
   padding: 16px 24px;
-  background: linear-gradient(135deg, var(--orange) 0%, #FF8C5A 100%);
+  background: linear-gradient(135deg, var(--ember) 0%, var(--ember-soft) 100%);
   border: none;
   border-radius: 14px;
   font-size: 16px;
@@ -223,4 +223,126 @@
   .section {
     padding: 80px 20px;
   }
+}
+
+/* Plan selector grid */
+.planGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.planCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+}
+
+.planCard:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.planCardPopular {
+  border-color: rgba(255, 69, 0, 0.4);
+  background: rgba(255, 69, 0, 0.06);
+}
+
+.planCardPopular:hover {
+  border-color: rgba(255, 69, 0, 0.6);
+}
+
+.planBadge {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px 10px;
+  background: linear-gradient(135deg, var(--ember), var(--ember-soft));
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  color: white;
+  white-space: nowrap;
+}
+
+.planName {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.planPrice {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--white);
+  letter-spacing: -0.02em;
+}
+
+.planCurrency {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.planPeriod {
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.planDesc {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.4;
+}
+
+.planCta {
+  margin-top: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ember);
+}
+
+.fallback {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 8px;
+}
+
+.fallbackPhone {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.fallbackPhone:hover {
+  color: var(--ember);
+}
+
+.loadingDots span {
+  animation: blink 1.2s infinite;
+}
+
+.loadingDots span:nth-child(2) { animation-delay: 0.2s; }
+.loadingDots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes blink {
+  0%, 80%, 100% { opacity: 0; }
+  40% { opacity: 1; }
 }

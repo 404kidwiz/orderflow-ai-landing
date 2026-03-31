@@ -37,7 +37,7 @@
 .orbOrange {
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(255, 107, 53, 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 69, 0, 0.15) 0%, transparent 70%);
   top: -100px;
   right: -100px;
   animation-delay: 0s;
@@ -46,7 +46,7 @@
 .orbPurple {
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(124, 58, 237, 0.12) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(138, 43, 226, 0.12) 0%, transparent 70%);
   bottom: -50px;
   left: -100px;
   animation-delay: -4s;
@@ -85,12 +85,12 @@
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  background: rgba(255, 107, 53, 0.1);
-  border: 1px solid rgba(255, 107, 53, 0.3);
+  background: var(--surface-ember);
+  border: 1px solid rgba(255, 69, 0, 0.3);
   border-radius: 100px;
   font-size: 13px;
   font-weight: 500;
-  color: var(--orange);
+  color: var(--ember);
   letter-spacing: 0.01em;
 }
 
@@ -99,7 +99,8 @@
   font-weight: 900;
   letter-spacing: -0.03em;
   line-height: 1.0;
-  color: var(--white);
+  color: var(--text-primary);
+  font-family: 'Noto Serif', Georgia, serif;
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -123,7 +124,7 @@
 
 .sub {
   font-size: clamp(16px, 2vw, 20px);
-  color: var(--gray-400);
+  color: var(--text-secondary);
   line-height: 1.7;
   max-width: 600px;
 }
@@ -137,13 +138,13 @@
 
 .ctaPrimary {
   padding: 14px 32px;
-  background: linear-gradient(135deg, var(--orange) 0%, #FF8C5A 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--ember) 0%, var(--ember-soft) 100%);
+  color: var(--obsidian-low);
   text-decoration: none;
   font-size: 16px;
   font-weight: 600;
   border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(255, 107, 53, 0.35);
+  box-shadow: 0 8px 30px rgba(255, 69, 0, 0.35);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   position: relative;
   overflow: hidden;
@@ -167,7 +168,7 @@
 
 .ctaPrimary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 40px rgba(255, 107, 53, 0.45);
+  box-shadow: 0 12px 40px rgba(255, 69, 0, 0.45);
 }
 
 .ctaSecondary {
@@ -176,12 +177,12 @@
   gap: 8px;
   padding: 14px 28px;
   border: 1px solid var(--border);
-  color: var(--white);
+  color: var(--text-primary);
   text-decoration: none;
   font-size: 16px;
   font-weight: 500;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--surface-glass);
   backdrop-filter: blur(10px);
   transition: all 0.25s ease;
 }
@@ -197,7 +198,7 @@
   align-items: center;
   gap: 8px;
   padding: 10px 20px;
-  color: var(--gray-400);
+  color: var(--text-secondary);
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
@@ -207,8 +208,8 @@
 }
 
 .phoneCta:hover {
-  color: var(--orange);
-  border-color: rgba(255, 107, 53, 0.3);
+  color: var(--ember);
+  border-color: rgba(255, 69, 0, 0.3);
 }
 
 .scrollIndicator {

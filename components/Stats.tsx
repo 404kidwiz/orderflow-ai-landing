@@ -4,10 +4,10 @@ import { motion, useInView } from "framer-motion";
 import styles from "./Stats.module.css";
 
 const STATS = [
-  { value: 500, suffix: "+", label: "Restaurants" },
-  { value: 3, suffix: "M+", label: "Orders Taken" },
   { value: 99.7, suffix: "%", label: "Uptime", decimal: true },
-  { value: 23, suffix: "%", label: "Avg Order Increase" },
+  { value: 24, suffix: "/7", label: "Order Taking" },
+  { value: 2, suffix: " min", label: "Setup Time" },
+  { value: 0, suffix: "", label: "Missed Calls" },
 ];
 
 function useCountUp(target: number, duration = 2000, decimal = false) {
@@ -43,12 +43,12 @@ function StatNumber({ value, suffix, label, decimal }: { value: number; suffix: 
       <span
         className={styles.statValue}
         style={{
-          color: "var(--accent)",
-          textShadow: "0 0 40px rgba(59,130,246,0.5), 0 0 80px rgba(59,130,246,0.2)",
+          color: "var(--ember)",
+          textShadow: "0 0 40px rgba(255,69,0,0.5), 0 0 80px rgba(255,69,0,0.2)",
         }}
       >
         {decimal ? count.toFixed(1) : count}
-        <span className={styles.suffix}>{suffix}</span>
+        {suffix && <span className={styles.suffix}>{suffix}</span>}
       </span>
       <span className={styles.statLabel}>{label}</span>
     </div>
@@ -66,8 +66,8 @@ export default function Stats() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <p className={styles.eyebrow}>By the numbers</p>
-          <h2 className={styles.title}>Results that speak.</h2>
+          <p className={styles.eyebrow}>Built for restaurants</p>
+          <h2 className={styles.title}>Never miss another order.</h2>
         </motion.div>
 
         <div className={styles.grid}>

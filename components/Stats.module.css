@@ -1,6 +1,6 @@
 .section {
   padding: 96px 24px;
-  background: var(--bg);
+  background: var(--obsidian-mid);
 }
 
 .container {
@@ -18,7 +18,7 @@
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   margin-bottom: 12px;
 }
 
@@ -27,6 +27,7 @@
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--text-primary);
+  font-family: 'Noto Serif', Georgia, serif;
 }
 
 .grid {
@@ -54,6 +55,8 @@
   line-height: 1;
   letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
+  color: var(--ember);
+  text-shadow: 0 0 40px rgba(255, 69, 0, 0.5), 0 0 80px rgba(255, 69, 0, 0.2);
 }
 
 .suffix {
@@ -65,7 +68,7 @@
 
 .statLabel {
   font-size: 14px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-weight: 500;
 }
 

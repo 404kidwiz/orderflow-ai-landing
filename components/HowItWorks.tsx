@@ -11,7 +11,7 @@ const STEPS = [
     title: "Customer Calls",
     description:
       "A hungry customer dials your number. No app, no website, no password. They just call — like they always do. Call connects in under 1 second.",
-    color: "var(--accent)",
+    color: "var(--ember)",
   },
   {
     num: "02",
@@ -19,7 +19,7 @@ const STEPS = [
     title: "AI Takes Order",
     description:
       "OrderFlow's AI understands natural speech, handles modifications like 'extra cheese, no onions', and up-sells like your best employee ever would.",
-    color: "#22c55e",
+    color: "var(--signal)",
   },
   {
     num: "03",
@@ -27,7 +27,7 @@ const STEPS = [
     title: "Kitchen Gets It",
     description:
       "Order drops into your kitchen display in real-time. SMS confirmation fires to the customer. You focus on cooking — not phones.",
-    color: "#F59E0B",
+    color: "var(--success)",
   },
 ];
 
@@ -46,7 +46,7 @@ export default function HowItWorks() {
           <p className={styles.eyebrow}>Process</p>
           <h2 className={styles.title}>
             Three steps.{" "}
-            <span style={{ color: "var(--accent)" }}>Zero complexity.</span>
+            <span style={{ color: "var(--ember)" }}>Zero complexity.</span>
           </h2>
         </motion.div>
 

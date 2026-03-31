@@ -1,6 +1,6 @@
 .section {
   padding: 64px 24px;
-  background: var(--bg);
+  background: var(--obsidian-low);
 }
 
 .container {
@@ -18,7 +18,7 @@
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   margin-bottom: 16px;
 }
 
@@ -28,6 +28,7 @@
   line-height: 1.15;
   letter-spacing: -0.02em;
   color: var(--text-primary);
+  font-family: 'Noto Serif', Georgia, serif;
 }
 
 .list {
@@ -52,7 +53,7 @@
   top: 0;
   bottom: 0;
   width: 2px;
-  background: var(--accent);
+  background: var(--ember);
   transform: scaleY(0);
   transform-origin: left;
   transition: transform 0.25s ease;
@@ -93,7 +94,7 @@
 .featureDesc {
   font-size: 15px;
   line-height: 1.65;
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 @media (max-width: 768px) {

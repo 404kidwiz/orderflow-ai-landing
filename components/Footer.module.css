@@ -1,7 +1,7 @@
 .footer {
   padding: 80px 24px 40px;
   border-top: 1px solid var(--border);
-  background: linear-gradient(180deg, transparent, rgba(10,10,15,0.5));
+  background: linear-gradient(180deg, transparent, rgba(10, 10, 15, 0.5));
 }
 
 .container {
@@ -27,14 +27,14 @@
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  color: var(--white);
+  color: var(--text-primary);
   font-weight: 700;
   font-size: 20px;
 }
 
 .tagline {
   font-size: 15px;
-  color: var(--gray-400);
+  color: var(--text-secondary);
   line-height: 1.6;
   max-width: 280px;
 }
@@ -51,13 +51,13 @@
   align-items: center;
   gap: 10px;
   font-size: 14px;
-  color: var(--gray-400);
+  color: var(--text-secondary);
   text-decoration: none;
   transition: color 0.2s;
 }
 
 .contactItem:hover {
-  color: var(--orange);
+  color: var(--ember);
 }
 
 .linkGroup {
@@ -69,7 +69,7 @@
 .linkTitle {
   font-size: 14px;
   font-weight: 700;
-  color: var(--white);
+  color: var(--text-primary);
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
@@ -83,13 +83,13 @@
 
 .link {
   font-size: 14px;
-  color: var(--gray-400);
+  color: var(--text-secondary);
   text-decoration: none;
   transition: color 0.2s;
 }
 
 .link:hover {
-  color: var(--orange);
+  color: var(--ember);
 }
 
 .bottom {
@@ -102,7 +102,7 @@
 
 .copyright {
   font-size: 13px;
-  color: var(--gray-600);
+  color: var(--text-secondary);
 }
 
 .social {
@@ -117,16 +117,16 @@
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  background: var(--glass);
+  background: var(--surface-glass);
   border: 1px solid var(--border);
-  color: var(--gray-400);
+  color: var(--text-secondary);
   transition: all 0.2s;
 }
 
 .socialLink:hover {
-  color: var(--orange);
-  border-color: var(--orange);
-  background: rgba(255, 107, 53, 0.1);
+  color: var(--ember);
+  border-color: var(--ember);
+  background: var(--surface-ember);
 }
 
 @media (max-width: 1024px) {

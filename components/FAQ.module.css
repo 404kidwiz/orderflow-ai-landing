@@ -1,5 +1,6 @@
 .section {
   padding: 120px 24px;
+  background: var(--obsidian-mid);
 }
 
 .container {
@@ -16,14 +17,15 @@
   font-size: clamp(32px, 5vw, 56px);
   font-weight: 900;
   letter-spacing: -0.03em;
-  color: var(--white);
+  color: var(--text-primary);
   line-height: 1.1;
   margin-bottom: 16px;
+  font-family: 'Noto Serif', Georgia, serif;
 }
 
 .subtitle {
   font-size: 18px;
-  color: var(--gray-400);
+  color: var(--text-secondary);
 }
 
 .list {
@@ -34,14 +36,14 @@
 
 .item {
   position: relative;
-  background: var(--glass);
+  background: var(--obsidian-high);
   border: 1px solid var(--border);
   border-radius: 16px;
   overflow: hidden;
   transition: border-color 0.2s;
 }
 
-/* Left orange border that fills when open */
+/* Left ember border that fills when open */
 .item::before {
   content: "";
   position: absolute;
@@ -49,7 +51,7 @@
   top: 0;
   bottom: 0;
   width: 3px;
-  background: var(--orange);
+  background: var(--ember);
   transform: scaleY(0);
   transform-origin: bottom;
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
@@ -62,7 +64,7 @@
 }
 
 .item:hover {
-  border-color: rgba(255, 107, 53, 0.2);
+  border-color: rgba(255, 69, 0, 0.2);
 }
 
 .trigger {
@@ -80,18 +82,18 @@
 .question {
   font-size: 17px;
   font-weight: 600;
-  color: var(--white);
+  color: var(--text-primary);
   line-height: 1.4;
 }
 
 .chevron {
-  color: var(--gray-400);
+  color: var(--text-secondary);
   flex-shrink: 0;
   transition: color 0.2s;
 }
 
 .item:has([data-state="open"]) .chevron {
-  color: var(--orange);
+  color: var(--ember);
 }
 
 .content {
@@ -101,7 +103,7 @@
 .answer {
   padding: 0 24px 20px;
   font-size: 15px;
-  color: var(--gray-400);
+  color: var(--text-secondary);
   line-height: 1.7;
 }
 

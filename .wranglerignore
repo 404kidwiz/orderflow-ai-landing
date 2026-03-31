@@ -1,0 +1,9 @@
+**/.git/**
+**/node_modules/**
+**/.next/cache/**
+**/.next/*.nft.json
+**/next-env.d.ts
+**/*.lock
+**/README.md
+**/tsconfig.json
+**/.DS_Store
