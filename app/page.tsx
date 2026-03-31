@@ -55,7 +55,7 @@ export default function Home() {
         <FAQ />
         <LeadForm />
         <Footer />
-        <CalendlyModal />
+        <CalendlyModal url="https://calendly.com/404kidwiz/30min" />
       </main>
     </>
   );
