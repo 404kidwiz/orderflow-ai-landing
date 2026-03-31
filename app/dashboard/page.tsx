@@ -206,7 +206,7 @@ export default function OpsDashboard() {
   // ── Try to fetch from Railway ──
   const fetchLiveOrders = useCallback(async () => {
     try {
-      const res = await fetch("https://orderflow-ai.up.railway.app/api/orders/recent", {
+      const res = await fetch("https://api-production-90b5.up.railway.app/api/orders/recent", {
         signal: AbortSignal.timeout(5000),
       });
       if (res.ok) {
