@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://orderflow-ai.pages.dev/sitemap.xml
