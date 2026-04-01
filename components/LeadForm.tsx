@@ -197,7 +197,7 @@ export default function LeadForm() {
           <div className="flex flex-col gap-6">
             <h2 className="font-serif text-[clamp(28px,4vw,40px)] font-black tracking-tight text-[var(--silk)] leading-[1.1]">Ready to start?</h2>
             <p className="text-[17px] text-[var(--ash)] leading-[1.6]">
-              Join 500+ restaurants already using OrderFlow. Get your free setup in under 30 minutes.
+              Get started with your free setup in under 30 minutes. No credit card required.
             </p>
             <ul className="list-none flex flex-col gap-3">
               {["14-day free trial", "No credit card required", "Cancel anytime"].map((b, i) => (
