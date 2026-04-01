@@ -4,11 +4,12 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Phone } from "lucide-react";
 
-const DASHBOARD_URL = process.env.NEXT_PUBLIC_DASHBOARD_URL || "https://enchanting-sable-bd0c5c.netlify.app";
+const DASHBOARD_URL = process.env.NEXT_PUBLIC_DASHBOARD_URL || "https://orderflow-ai.pages.dev";
 
 const navLinks = [
   { href: "#features", label: "Features" },
   { href: "#demo", label: "Demo" },
+  { href: "/roi-calculator", label: "ROI Calculator" },
   { href: "#pricing", label: "Pricing" },
   { href: `${DASHBOARD_URL}/demo`, label: "Dashboard" },
 ];
