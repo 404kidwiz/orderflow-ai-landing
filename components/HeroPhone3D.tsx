@@ -1,156 +1,122 @@
 "use client";
 
-import { Suspense, useRef, useState } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { RoundedBox, Float } from "@react-three/drei";
-import * as THREE from "three";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
-// Mouse position tracker
-function useMousePosition() {
+export default function HeroPhone3D() {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
-  
-  if (typeof window !== "undefined") {
-    window.addEventListener("mousemove", (e) => {
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
       setMouse({
         x: (e.clientX / window.innerWidth) * 2 - 1,
         y: -(e.clientY / window.innerHeight) * 2 + 1,
       });
-    });
-  }
-  
-  return mouse;
-}
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
-// Floating phone mesh
-function PhoneMesh({ mouse }: { mouse: { x: number; y: number } }) {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const glowRef = useRef<THREE.Mesh>(null);
-  
-  useFrame(() => {
-    if (meshRef.current) {
-      // Subtle rotation based on mouse position
-      meshRef.current.rotation.y = THREE.MathUtils.lerp(
-        meshRef.current.rotation.y,
-        mouse.x * 0.15,
-        0.05
-      );
-      meshRef.current.rotation.x = THREE.MathUtils.lerp(
-        meshRef.current.rotation.x,
-        -mouse.y * 0.1,
-        0.05
-      );
-    }
-    if (glowRef.current) {
-      glowRef.current.rotation.y = meshRef.current?.rotation.y || 0;
-      glowRef.current.rotation.x = meshRef.current?.rotation.x || 0;
-    }
-  });
-  
   return (
-    <Float
-      speed={2}
-      rotationIntensity={0.1}
-      floatIntensity={0.4}
+    <div
+      className="absolute top-0 right-0 w-[280px] h-[400px] pointer-events-none opacity-90 hidden xl:block z-10"
+      style={{ perspective: "1000px" }}
     >
-      {/* Ember glow behind phone */}
-      <mesh ref={glowRef} position={[0, 0, -0.15]}>
-        <planeGeometry args={[1.8, 3.2]} />
-        <meshBasicMaterial
-          color="#FF4500"
-          transparent
-          opacity={0.08}
-        />
-      </mesh>
-      
-      {/* Phone body */}
-      <mesh ref={meshRef}>
-        <RoundedBox args={[1, 2, 0.08]} radius={0.08} smoothness={4}>
-          <meshStandardMaterial
-            color="#201F1F"
-            metalness={0.8}
-            roughness={0.2}
-          />
-        </RoundedBox>
-      </mesh>
-      
-      {/* Screen */}
-      <mesh position={[0, 0, 0.042]}>
-        <RoundedBox args={[0.88, 1.8, 0.001]} radius={0.04} smoothness={4}>
-          <meshStandardMaterial
-            color="#0a0a0a"
-            metalness={0.1}
-            roughness={0.1}
-            emissive="#FF4500"
-            emissiveIntensity={0.02}
-          />
-        </RoundedBox>
-      </mesh>
-      
-      {/* Screen content glow lines */}
-      <mesh position={[0, 0.3, 0.044]}>
-        <boxGeometry args={[0.6, 0.15, 0.001]} />
-        <meshBasicMaterial color="#FF4500" transparent opacity={0.6} />
-      </mesh>
-      <mesh position={[0, 0, 0.044]}>
-        <boxGeometry args={[0.5, 0.08, 0.001]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0.15} />
-      </mesh>
-      <mesh position={[0, -0.2, 0.044]}>
-        <boxGeometry args={[0.4, 0.05, 0.001]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0.1} />
-      </mesh>
-      <mesh position={[0, -0.4, 0.044]}>
-        <boxGeometry args={[0.45, 0.08, 0.001]} />
-        <meshBasicMaterial color="#8A2BE2" transparent opacity={0.4} />
-      </mesh>
-      
-      {/* Camera notch */}
-      <mesh position={[0.25, 0.85, 0.045]}>
-        <cylinderGeometry args={[0.03, 0.03, 0.01, 16]} />
-        <meshStandardMaterial color="#353534" metalness={0.9} roughness={0.1} />
-      </mesh>
-      
-      {/* Ember edge glow */}
-      <mesh position={[0, 0, 0]}>
-        <RoundedBox args={[1.02, 2.02, 0.09]} radius={0.09} smoothness={4}>
-          <meshBasicMaterial
-            color="#FF4500"
-            transparent
-            opacity={0.05}
-          />
-        </RoundedBox>
-      </mesh>
-    </Float>
-  );
-}
-
-// Scene component
-function Scene({ mouse }: { mouse: { x: number; y: number } }) {
-  return (
-    <>
-      <ambientLight intensity={0.4} />
-      <pointLight position={[2, 2, 2]} intensity={0.8} color="#ffffff" />
-      <pointLight position={[-2, -1, 1]} intensity={0.4} color="#FF4500" />
-      <pointLight position={[0, -2, 2]} intensity={0.3} color="#8A2BE2" />
-      <PhoneMesh mouse={mouse} />
-    </>
-  );
-}
-
-export default function HeroPhone3D() {
-  const mouse = useMousePosition();
-  
-  return (
-    <div className="absolute top-0 right-0 w-[280px] h-[400px] pointer-events-none opacity-90 hidden xl:block z-10">
-      <Canvas
-        camera={{ position: [0, 0, 3.5], fov: 45 }}
-        dpr={[1, 2]}
-        gl={{ antialias: true, alpha: true }}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="w-full h-full"
+        style={{
+          transform: `rotateY(${mouse.x * 8}deg) rotateX(${-mouse.y * 5}deg)`,
+          transition: "transform 0.3s ease-out",
+          transformStyle: "preserve-3d",
+        }}
       >
-        <Suspense fallback={null}>
-          <Scene mouse={mouse} />
-        </Suspense>
-      </Canvas>
+        {/* Ember glow behind phone */}
+        <div
+          className="absolute inset-0 rounded-[3rem]"
+          style={{
+            background: "radial-gradient(ellipse at center, rgba(255,69,0,0.12) 0%, transparent 70%)",
+            filter: "blur(30px)",
+            transform: "scale(1.3) translateZ(-20px)",
+          }}
+        />
+
+        {/* Phone frame */}
+        <div
+          className="relative mx-auto w-[180px] h-[360px] rounded-[2rem]"
+          style={{
+            background: "linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 50%, #0d0d0d 100%)",
+            boxShadow: `
+              0 30px 80px rgba(0,0,0,0.6),
+              0 0 40px rgba(255,69,0,0.08),
+              inset 0 1px 0 rgba(255,255,255,0.1),
+              inset 0 -1px 0 rgba(255,255,255,0.03)
+            `,
+            border: "1px solid rgba(255,255,255,0.08)",
+            transform: "translateZ(10px)",
+          }}
+        >
+          {/* Screen */}
+          <div
+            className="absolute top-[10px] left-[10px] right-[10px] bottom-[10px] rounded-[1.5rem] overflow-hidden"
+            style={{
+              background: "linear-gradient(180deg, #0a0a0a 0%, #111 100%)",
+              border: "1px solid rgba(255,255,255,0.05)",
+            }}
+          >
+            {/* Camera notch */}
+            <div
+              className="absolute top-[12px] right-[16px] w-[8px] h-[8px] rounded-full"
+              style={{
+                background: "radial-gradient(circle, #1a1a2e 30%, #0d0d15 100%)",
+                boxShadow: "0 0 3px rgba(255,255,255,0.1)",
+              }}
+            />
+
+            {/* Screen content lines */}
+            <div className="absolute top-[32px] left-[16px] right-[16px] space-y-3">
+              <div
+                className="h-[18px] rounded-md"
+                style={{
+                  background: "linear-gradient(90deg, rgba(255,69,0,0.5) 0%, rgba(255,69,0,0.3) 100%)",
+                  width: "70%",
+                }}
+              />
+              <div
+                className="h-[8px] rounded-sm"
+                style={{
+                  background: "rgba(255,255,255,0.1)",
+                  width: "90%",
+                }}
+              />
+              <div
+                className="h-[6px] rounded-sm"
+                style={{
+                  background: "rgba(255,255,255,0.07)",
+                  width: "75%",
+                }}
+              />
+              <div
+                className="h-[10px] rounded-md mt-4"
+                style={{
+                  background: "linear-gradient(90deg, rgba(138,43,226,0.35) 0%, rgba(138,43,226,0.15) 100%)",
+                  width: "60%",
+                }}
+              />
+            </div>
+
+            {/* Animated shimmer */}
+            <div
+              className="absolute inset-0 animate-pulse"
+              style={{
+                background: "linear-gradient(135deg, transparent 40%, rgba(255,69,0,0.03) 50%, transparent 60%)",
+              }}
+            />
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 }

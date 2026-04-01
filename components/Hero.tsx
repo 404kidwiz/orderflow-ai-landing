@@ -5,19 +5,13 @@ import { motion } from "framer-motion";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import dynamic from "next/dynamic";
+import HeroPhone3D from "./HeroPhone3D";
 import { Phone, CheckCircle2, Clock } from "lucide-react";
 
 // Register GSAP plugins
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
-
-// Lazy load 3D component for performance
-const HeroPhone3D = dynamic(() => import("./HeroPhone3D"), {
-  ssr: false,
-  loading: () => null,
-});
 
 // ── Terminal mockup — updated with OrderFlow real data ──
 function TerminalMockup() {
