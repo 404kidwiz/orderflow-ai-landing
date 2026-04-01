@@ -36,10 +36,7 @@ export default function RootLayout({
     <html lang="en" className={`${notoSerif.variable} ${manrope.variable}`}>
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link
-          rel="stylesheet"
-          href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap"
-        />
+        {/* General Sans removed — Manrope + Noto Serif cover all needs */}
       </head>
       <body className="font-sans">
         <div className="noise-overlay" aria-hidden="true" />

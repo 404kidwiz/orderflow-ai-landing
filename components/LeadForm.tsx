@@ -274,7 +274,7 @@ export default function LeadForm() {
                   ) : (
                     <>
                       <Send size={18} />
-                      Get Started Free
+                      Start Your Free Trial
                     </>
                   )}
                 </MagneticSubmit>

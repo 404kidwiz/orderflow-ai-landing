@@ -1,7 +1,23 @@
 "use client";
 
+import { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import dynamic from "next/dynamic";
 import { Phone, CheckCircle2, Clock } from "lucide-react";
+
+// Register GSAP plugins
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+// Lazy load 3D component for performance
+const HeroPhone3D = dynamic(() => import("./HeroPhone3D"), {
+  ssr: false,
+  loading: () => null,
+});
 
 // ── Terminal mockup — updated with OrderFlow real data ──
 function TerminalMockup() {
@@ -198,10 +214,80 @@ function PillButton({
   );
 }
 
-// ── Hero — static gradient bg (no video for LCP perf) ──
+// ── Hero — with kinetic typography and scroll effects ──
 export default function Hero() {
+  const containerRef = useRef<HTMLElement>(null);
+  const headlineRef = useRef<HTMLHeadingElement>(null);
+  const terminalRef = useRef<HTMLDivElement>(null);
+
+  // GSAP kinetic typography on load
+  useGSAP(() => {
+    if (!headlineRef.current) return;
+
+    // Split headline into words
+    const headline = headlineRef.current;
+    const text = headline.textContent || "";
+    headline.innerHTML = "";
+    
+    const words = text.split(" ").filter(Boolean);
+    words.forEach((word) => {
+      const span = document.createElement("span");
+      span.className = "headline-word inline-block";
+      span.style.opacity = "0";
+      span.style.transform = "translateY(40px) rotateX(-15deg)";
+      span.style.transformOrigin = "center bottom";
+      span.style.display = "inline-block";
+      span.style.marginRight = "0.25em";
+      span.textContent = word;
+      headline.appendChild(span);
+    });
+
+    // Animate words in with stagger
+    const wordElements = headline.querySelectorAll(".headline-word");
+    gsap.to(wordElements, {
+      opacity: 1,
+      y: 0,
+      rotateX: 0,
+      duration: 0.9,
+      ease: "power3.out",
+      stagger: 0.1,
+      delay: 0.3,
+    });
+
+    // Scroll-triggered scale and fade for headline
+    gsap.to(headline, {
+      scale: 0.95,
+      opacity: 0.4,
+      ease: "none",
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: "top top",
+        end: "bottom top",
+        scrub: true,
+      },
+    });
+
+    // Parallax for terminal (slower = depth)
+    if (terminalRef.current) {
+      gsap.to(terminalRef.current, {
+        y: 60,
+        ease: "none",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: 0.5,
+        },
+      });
+    }
+
+    return () => {
+      ScrollTrigger.getAll().forEach(t => t.kill());
+    };
+  }, { scope: containerRef });
+
   return (
-    <section className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#0a0a0a] via-[#131313] to-[#1a0a0a]">
+    <section ref={containerRef} className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#0a0a0a] via-[#131313] to-[#1a0a0a]">
       {/* Ambient ember glow orbs */}
       <div
         className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full pointer-events-none"
@@ -237,8 +323,9 @@ export default function Hero() {
           {/* Left — 55% */}
           <div className="flex flex-col gap-8">
 
-            {/* Gradient headline — 144.5deg white → transparent */}
-            <motion.h1
+            {/* Gradient headline — kinetic typography with GSAP */}
+            <h1
+              ref={headlineRef}
               className="text-[56px] max-md:text-[36px] font-medium leading-[1.28] tracking-tight max-w-[613px]"
               style={{
                 background:
@@ -246,13 +333,11 @@ export default function Hero() {
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
+                perspective: "1000px",
               }}
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             >
               Take Orders While You Sleep
-            </motion.h1>
+            </h1>
 
             {/* Subtitle */}
             <motion.p
@@ -306,8 +391,9 @@ export default function Hero() {
 
           </div>
 
-          {/* Right — 45% terminal mockup */}
-          <div className="relative hidden lg:block">
+          {/* Right — 45% terminal mockup with 3D phone above */}
+          <div ref={terminalRef} className="relative hidden lg:block">
+            <HeroPhone3D />
             <TerminalMockup />
           </div>
 
