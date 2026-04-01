@@ -7,7 +7,7 @@ const STATS = [
   { value: 99.7, suffix: "%", label: "Uptime", decimal: true },
   { value: 24, suffix: "/7", label: "Order Taking" },
   { value: 2, suffix: " min", label: "Setup Time" },
-  { value: 0, suffix: "", label: "Missed Calls" },
+  { value: 100, suffix: "%", label: "Calls Answered" },
 ];
 
 function useCountUp(target: number, duration = 2000, decimal = false) {
