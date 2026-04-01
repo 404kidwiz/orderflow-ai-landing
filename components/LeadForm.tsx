@@ -166,7 +166,7 @@ export default function LeadForm() {
           phone: form.phone,
           email: form.email,
           restaurant: form.restaurant,
-          type: "catering",
+          type: "demo_request",
           description: `Lead from landing page — ${form.restaurant || "No restaurant name"}`,
         }),
       });
