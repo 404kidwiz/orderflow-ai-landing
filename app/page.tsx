@@ -5,11 +5,9 @@ import { initLenis, destroyLenis } from "@/lib/smooth-scroll";
 import { gsap, ScrollTrigger } from "@/lib/scroll-animations";
 import NavBar from "@/components/NavBar/NavBar";
 import Hero from "@/components/Hero";
-import TrustBar from "@/components/TrustBar/TrustBar";
 import HowItWorks from "@/components/HowItWorks";
 import LiveDemo from "@/components/LiveDemo";
 import Features from "@/components/Features";
-import ProductShowcase from "@/components/ProductShowcase";
 import Stats from "@/components/Stats";
 import Testimonials from "@/components/Testimonials";
 import Pricing from "@/components/Pricing";
@@ -46,11 +44,9 @@ export default function Home() {
       <main className="relative min-h-screen bg-[var(--void)] overflow-x-hidden">
         <NavBar />
         <Hero />
-        <TrustBar />
         <HowItWorks />
         <LiveDemo />
         <Features />
-        <ProductShowcase />
         <Stats />
         <Testimonials />
         <Pricing />
