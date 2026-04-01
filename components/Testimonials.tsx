@@ -1,44 +1,46 @@
 "use client";
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Send, Loader2, CheckCircle, Rocket } from "lucide-react";
 import styles from "./Testimonials.module.css";
 
-const TESTIMONIALS = [
-  {
-    quote:
-      "We're building OrderFlow to solve a real problem: restaurants losing orders to busy signals and voicemail. If you're a restaurant owner, we'd love to work with you.",
-    author: "Andrew M.",
-    business: "404 Technologies",
-    location: "Atlanta, GA",
-  },
-  {
-    quote:
-      "Our AI voice agent handles every call, never takes a break, and never forgets to upsell. We're looking for early restaurant partners to shape the product.",
-    author: "The OrderFlow Team",
-    business: "Early Access Program",
-    location: "Now Accepting Signups",
-  },
-];
-
 export default function Testimonials() {
-  const [active, setActive] = useState(0);
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
 
-  const prev = () => setActive((a) => (a - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
-  const next = () => setActive((a) => (a + 1) % TESTIMONIALS.length);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setStatus("loading");
 
-  // Auto-rotate
-  useEffect(() => {
-    const t = setInterval(next, 6000);
-    return () => clearInterval(t);
-  }, []);
-
-  const t = TESTIMONIALS[active];
+    try {
+      const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://api-production-90b5.up.railway.app";
+      const res = await fetch(`${API_BASE}/api/leads`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: "Partner Program",
+          email,
+          phone: "",
+          restaurant: "",
+          type: "founding_partner",
+          description: "Founding Partner Program signup from landing page",
+        }),
+      });
+      if (res.ok) {
+        setStatus("success");
+        setEmail("");
+      } else {
+        setStatus("idle");
+      }
+    } catch {
+      setStatus("idle");
+    }
+  };
 
   return (
     <section className={styles.section}>
       <div className={styles.container}>
-
         <motion.div
           className={styles.header}
           initial={{ opacity: 0, y: 24 }}
@@ -46,58 +48,86 @@ export default function Testimonials() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <p className={styles.eyebrow}>Our Mission</p>
+          <p className={styles.eyebrow}>Exclusive Early Access</p>
+          <h2 className={styles.title}>
+            Become a Founding Partner
+          </h2>
         </motion.div>
 
-        {/* Large editorial quote */}
-        <div className={styles.quoteArea}>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={active}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className={styles.quoteWrapper}
+        <motion.div
+          className="max-w-2xl mx-auto text-center"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+        >
+          <div className="flex justify-center mb-6">
+            <div
+              className="w-16 h-16 rounded-2xl flex items-center justify-center"
+              style={{
+                background: "linear-gradient(135deg, rgba(255,69,0,0.15), rgba(138,43,226,0.1))",
+                border: "1px solid rgba(255,69,0,0.2)",
+              }}
             >
-              <span className={styles.openQuote}>&ldquo;</span>
-              <blockquote className={styles.quoteText}>
-                {t.quote}
-              </blockquote>
-
-              <div className={styles.attribution}>
-                <span className={styles.authorName}>{t.author}</span>
-                <span className={styles.separator}>·</span>
-                <span className={styles.business}>{t.business}</span>
-                <span className={styles.separator}>·</span>
-                <span className={styles.location}>{t.location}</span>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Navigation */}
-        <div className={styles.nav}>
-          <button onClick={prev} className={styles.navBtn} aria-label="Previous testimonial">
-            <ChevronLeft size={20} />
-          </button>
-
-          <div className={styles.dots}>
-            {TESTIMONIALS.map((_, i) => (
-              <button
-                key={i}
-                className={`${styles.dot} ${i === active ? styles.activeDot : ""}`}
-                onClick={() => setActive(i)}
-                aria-label={`Testimonial ${i + 1}`}
-              />
-            ))}
+              <Rocket size={28} className="text-[var(--ember)]" />
+            </div>
           </div>
 
-          <button onClick={next} className={styles.navBtn} aria-label="Next testimonial">
-            <ChevronRight size={20} />
-          </button>
-        </div>
+          <p className="text-[18px] text-[var(--ash)] leading-relaxed mb-8">
+            Join the first 50 restaurants to shape OrderFlow AI. Founding Partners get{" "}
+            <span className="text-[var(--silk)] font-semibold">lifetime free setup</span>,{" "}
+            <span className="text-[var(--silk)] font-semibold">priority support</span>, and{" "}
+            <span className="text-[var(--ember)] font-semibold">locked-in founding pricing</span> — forever.
+          </p>
 
+          <ul className="list-none flex flex-col gap-3 mb-10 text-left max-w-md mx-auto">
+            {[
+              "Free white-glove onboarding & menu setup",
+              "50% off your first 6 months — locked in for life",
+              "Direct line to the founding team for feature requests",
+              "Early access to new AI capabilities before anyone else",
+            ].map((b, i) => (
+              <li key={i} className="flex items-start gap-3 text-[15px] text-[var(--ash)]">
+                <CheckCircle size={16} className="text-[#22c55e] flex-shrink-0 mt-0.5" />
+                {b}
+              </li>
+            ))}
+          </ul>
+
+          {status === "success" ? (
+            <motion.div
+              className="flex items-center justify-center gap-3 py-4"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+            >
+              <CheckCircle size={24} className="text-[#22c55e]" />
+              <span className="text-[var(--silk)] font-semibold">You&apos;re on the list! We&apos;ll reach out within 24 hours.</span>
+            </motion.div>
+          ) : (
+            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                required
+                className="flex-1 px-5 py-3.5 bg-white/5 border border-[var(--border)] rounded-xl text-[15px] text-[var(--silk)] outline-none transition-all duration-200 focus:border-[var(--ember)] focus:shadow-[0_0_0_3px_rgba(255,69,0,0.15)]"
+              />
+              <button
+                type="submit"
+                disabled={status === "loading"}
+                className="flex items-center justify-center gap-2 px-6 py-3.5 bg-[linear-gradient(135deg,var(--ember)_0%,var(--ember-glow)_100%)] border-none rounded-xl text-[14px] font-bold text-white cursor-pointer transition-all duration-200 shadow-[0_4px_20px_rgba(255,69,0,0.3)] hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(255,69,0,0.4)] disabled:opacity-70"
+              >
+                {status === "loading" ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
+                {status === "loading" ? "Joining..." : "Join the Program"}
+              </button>
+            </form>
+          )}
+
+          <p className="text-[13px] text-[var(--ash)] mt-4 opacity-60">
+            Only {50} spots available · No commitment required
+          </p>
+        </motion.div>
       </div>
     </section>
   );
