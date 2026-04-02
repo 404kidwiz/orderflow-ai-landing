@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://orderflow-ai.netlify.app/</loc>
+    <loc>https://82b54aca.orderflow-ai.pages.dev/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://orderflow-ai.netlify.app/roi-calculator</loc>
+    <loc>https://82b54aca.orderflow-ai.pages.dev/roi-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://orderflow-ai.netlify.app/dashboard</loc>
+    <loc>https://82b54aca.orderflow-ai.pages.dev/dashboard</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://orderflow-ai.netlify.app/pricing</loc>
+    <loc>https://82b54aca.orderflow-ai.pages.dev/pricing</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://orderflow-ai.netlify.app/demo</loc>
+    <loc>https://82b54aca.orderflow-ai.pages.dev/demo</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>

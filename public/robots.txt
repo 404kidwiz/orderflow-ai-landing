@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://orderflow-ai.netlify.app/sitemap.xml
+Sitemap: https://82b54aca.orderflow-ai.pages.dev/sitemap.xml

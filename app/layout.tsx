@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     "kitchen display",
     "order management",
   ],
-  authors: [{ name: "OrderFlow AI", url: "https://orderflow-ai.netlify.app" }],
+  authors: [{ name: "OrderFlow AI", url: "https://82b54aca.orderflow-ai.pages.dev" }],
   creator: "OrderFlow AI",
   publisher: "OrderFlow AI",
   robots: {
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "OrderFlow AI — Voice Ordering for Restaurants",
     description: "AI-powered voice ordering. Never miss a phone order again. 24/7, natural conversation, smart upselling.",
-    url: "https://orderflow-ai.netlify.app",
+    url: "https://82b54aca.orderflow-ai.pages.dev",
     siteName: "OrderFlow AI",
     type: "website",
     locale: "en_US",
@@ -67,9 +67,9 @@ export const metadata: Metadata = {
     creator: "@orderflowai",
   },
   alternates: {
-    canonical: "https://orderflow-ai.netlify.app",
+    canonical: "https://82b54aca.orderflow-ai.pages.dev",
   },
-  metadataBase: new URL("https://orderflow-ai.netlify.app"),
+  metadataBase: new URL("https://82b54aca.orderflow-ai.pages.dev"),
 };
 
 export default function RootLayout({
@@ -95,19 +95,19 @@ export default function RootLayout({
               "@graph": [
                 {
                   "@type": "Organization",
-                  "@id": "https://orderflow-ai.netlify.app/#organization",
+                  "@id": "https://82b54aca.orderflow-ai.pages.dev/#organization",
                   name: "OrderFlow AI",
-                  url: "https://orderflow-ai.netlify.app",
+                  url: "https://82b54aca.orderflow-ai.pages.dev",
                   description: "AI voice agent for restaurant phone ordering",
                   telephone: "+1-770-525-5393",
                   foundingLocation: { "@type": "Place", name: "Atlanta, GA" },
                 },
                 {
                   "@type": "WebSite",
-                  "@id": "https://orderflow-ai.netlify.app/#website",
-                  url: "https://orderflow-ai.netlify.app",
+                  "@id": "https://82b54aca.orderflow-ai.pages.dev/#website",
+                  url: "https://82b54aca.orderflow-ai.pages.dev",
                   name: "OrderFlow AI",
-                  publisher: { "@id": "https://orderflow-ai.netlify.app/#organization" },
+                  publisher: { "@id": "https://82b54aca.orderflow-ai.pages.dev/#organization" },
                 },
               ],
             }),
