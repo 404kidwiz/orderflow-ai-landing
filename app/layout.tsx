@@ -17,14 +17,59 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   title: "OrderFlow AI — Take Orders While You Sleep",
   description:
-    "The AI voice agent that answers calls, up sells, and delivers — 24/7. No app downloads. No new phone number. Just more orders.",
+    "The AI voice agent that answers calls, upsells naturally, and delivers orders to your kitchen — 24/7. No app downloads. No new phone number. Live in 30 seconds.",
+  keywords: [
+    "AI voice ordering",
+    "restaurant phone system",
+    "AI phone agent",
+    "restaurant automation",
+    "voice AI",
+    "phone ordering",
+    "restaurant technology",
+    "kitchen display",
+    "order management",
+  ],
+  authors: [{ name: "OrderFlow AI", url: "https://orderflow-ai.netlify.app" }],
+  creator: "OrderFlow AI",
+  publisher: "OrderFlow AI",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
     title: "OrderFlow AI — Voice Ordering for Restaurants",
-    description: "AI-powered voice ordering. Never miss a phone order again.",
+    description: "AI-powered voice ordering. Never miss a phone order again. 24/7, natural conversation, smart upselling.",
     url: "https://orderflow-ai.netlify.app",
     siteName: "OrderFlow AI",
     type: "website",
+    locale: "en_US",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "OrderFlow AI — Take Orders While You Sleep",
+      },
+    ],
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "OrderFlow AI — Voice Ordering for Restaurants",
+    description: "AI-powered voice ordering. Never miss a phone order again.",
+    images: ["/og-image.png"],
+    creator: "@orderflowai",
+  },
+  alternates: {
+    canonical: "https://orderflow-ai.netlify.app",
+  },
+  metadataBase: new URL("https://orderflow-ai.netlify.app"),
 };
 
 export default function RootLayout({
@@ -36,6 +81,11 @@ export default function RootLayout({
     <html lang="en" className={`${notoSerif.variable} ${manrope.variable}`}>
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#3B82F6" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="OrderFlow" />
         {/* General Sans removed — Manrope + Noto Serif cover all needs */}
         <script
           type="application/ld+json"
