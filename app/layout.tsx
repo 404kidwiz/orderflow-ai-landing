@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "OrderFlow AI — Voice Ordering for Restaurants",
     description: "AI-powered voice ordering. Never miss a phone order again.",
-    url: "https://orderflow-ai.pages.dev",
+    url: "https://orderflow-ai.netlify.app",
     siteName: "OrderFlow AI",
     type: "website",
   },
@@ -45,19 +45,19 @@ export default function RootLayout({
               "@graph": [
                 {
                   "@type": "Organization",
-                  "@id": "https://orderflow-ai.pages.dev/#organization",
+                  "@id": "https://orderflow-ai.netlify.app/#organization",
                   name: "OrderFlow AI",
-                  url: "https://orderflow-ai.pages.dev",
+                  url: "https://orderflow-ai.netlify.app",
                   description: "AI voice agent for restaurant phone ordering",
                   telephone: "+1-770-525-5393",
                   foundingLocation: { "@type": "Place", name: "Atlanta, GA" },
                 },
                 {
                   "@type": "WebSite",
-                  "@id": "https://orderflow-ai.pages.dev/#website",
-                  url: "https://orderflow-ai.pages.dev",
+                  "@id": "https://orderflow-ai.netlify.app/#website",
+                  url: "https://orderflow-ai.netlify.app",
                   name: "OrderFlow AI",
-                  publisher: { "@id": "https://orderflow-ai.pages.dev/#organization" },
+                  publisher: { "@id": "https://orderflow-ai.netlify.app/#organization" },
                 },
               ],
             }),
